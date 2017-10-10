@@ -1,0 +1,51 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+{% block title %}注册{% endblock %}
+{% block css %}
+  <link href="{% static 'css/users/register.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <form id="register-form" class="col s12 m6 offset-m3" method="post"
+            action="{% url 'users:register' %}">
+        {% csrf_token %}
+        <div class="card-panel">
+          <div class="row">
+            <h4 class="center">注册</h4>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">account_circle</i>
+              <input id="username" class="validate" name="username" type="text">
+              <label for="username">用户名</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">lock</i>
+              <input id="password" class="validate" name="password" type="password">
+              <label for="password">密码</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">email</i>
+              <input id="email" class="validate" name="email" type="email">
+              <label for="email">Email</label>
+            </div>
+          </div>
+          <div class="row">
+            <button  class="waves-effect waves-light btn col l8 m10 s12 offset-l2 offset-m1"
+                     type="submit" name="action">注册</button >
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+  <script src="{% static 'js/users/register.js' %}"></script>
+  <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+{% endblock %}
