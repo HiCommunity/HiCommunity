@@ -1,8 +1,8 @@
 # coding=utf-8
-from django.core.urlresolvers import reverse
-import re
+# from django.core.urlresolvers import reverse
+# import re
 from common.exception import HiException
-from django.shortcuts import render, render_to_response, HttpResponse
+from django.shortcuts import HttpResponse
 import json
 
 
@@ -22,7 +22,8 @@ class CommonMiddleware(object):
 
         return response
 
-    def process_exception(self, request, exception):
+    @staticmethod
+    def process_exception(request, exception):
         if isinstance(exception, HiException):
             if request.method == 'POST':
                 return HttpResponse(json.dumps({
@@ -35,8 +36,8 @@ class CommonMiddleware(object):
             else:
                 pass
 
-
-    def process_template_response(self, request, response):
+    @staticmethod
+    def process_template_response(request, response):
         # urls = (reverse('users:login_page'), reverse('users:register_page'),
         #         reverse('users:logout'))
         # content = response.content

@@ -139,12 +139,12 @@ $.ajaxSetup({
 // loading cover
 function add_loading(css_selector) {
     var loading_html = '<div class="loading-cover"></div>';
-    $parent_elem = $(css_selector);
+    var $parent_elem = $(css_selector);
     $parent_elem.prepend(loading_html);
 }
 
 function remove_loading(css_selector) {
-    $parent_elem = $(css_selector) || $('body');
+    var $parent_elem = $(css_selector) || $('body');
     $parent_elem.find('.loading-cover').remove();
 }
 

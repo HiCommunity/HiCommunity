@@ -25,7 +25,7 @@ $(function () {
                 if (obj.result) {
                     window.location.href = obj.msg.redirect_url;
                 } else {
-                    Materialize.toast(obj.msg.desc, 3000, 'rounded');
+                    Materialize.toast(obj.msg.desc, 3000);
                     //$this.find('.card-panel').children('div:first-child').after()
                 }
             },

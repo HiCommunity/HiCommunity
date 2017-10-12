@@ -42,6 +42,11 @@ class UserAccountCreateFailed(HiException):
     code = 1006
 
 
+class UsernameOrEmailAlreadyExist(HiException):
+    desc = 'Username or email already exist'
+    code = 1007
+
+
 class UserLogoutFailed(HiException):
     desc = 'User logout failed'
-    code = 1007
+    code = 1008
