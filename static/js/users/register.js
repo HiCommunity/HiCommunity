@@ -6,10 +6,10 @@ $(function () {
     $('#register-form').submit(function (e) {
         var $this = $(this);
         var $submit_btn = $this.find('button[type=submit]');
-        var data = $this.serialize();
         var $password = $this.find('#password');
         var plain_pwd = $password.val();
         $password.val(md5(plain_pwd));
+        var data = $this.serialize();
 
         // prevent default submit action
         e.preventDefault();
@@ -23,9 +23,10 @@ $(function () {
                 var obj = $.parseJSON(callback);
                 console.log(obj);
                 if (obj.result) {
-
+                    window.location.href = obj.msg.redirect_url;
                 } else {
-
+                    Materialize.toast(obj.msg.desc, 3000, 'rounded');
+                    //$this.find('.card-panel').children('div:first-child').after()
                 }
             },
             complete: function () {

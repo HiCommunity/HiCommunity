@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^login/submit/$', views.login, name='login'),
     url(r'^register/$', views.register_page, name='register_page'),
     url(r'^register/submit/$', views.register, name='register'),
+    url(r'^logout/$', views.logout, name='logout'),
 ]

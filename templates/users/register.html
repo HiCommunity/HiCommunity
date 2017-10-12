@@ -4,6 +4,8 @@
 {% block css %}
   <link href="{% static 'css/users/register.css' %}" rel="stylesheet">
 {% endblock %}
+{% block nav_login_ref %}{% endblock %}
+{% block nav_register_ref %}{% endblock %}
 {% block content %}
   <div class="container">
     <div class="row">
@@ -46,6 +48,6 @@
   </div>
 {% endblock %}
 {% block js %}
-  <script src="{% static 'js/users/register.js' %}"></script>
+  <script src="{% static 'js/users/register.js' %}?v=1"></script>
   <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
 {% endblock %}

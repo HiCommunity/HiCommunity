@@ -3,7 +3,7 @@
 <html lang="zh-hans">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %}HiCommunity{% endblock %}</title>
   <link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
@@ -14,18 +14,23 @@
 
   <nav>
     <div class="nav-wrapper teal lighten-2">
-      <a href="#!" class="brand-logo">Logo</a>
+      <a href="{% url 'index' %}" class="brand-logo">Logo</a>
       <a href="#" data-activates="mobile-menu" class="button-collapse">
         <i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="{% url 'users:login_page' %}">登录</a></li>
-        <li><a href="{% url 'users:register_page' %}">注册</a></li>
-        <li><a href="footer">注销</a></li>
+        {% if is_login %}
+          <li>Hello, </li>
+          <li><a href="#">{{ request.session.login_user_name }}</a></li>
+          <li><a href="{% url 'users:logout' %}?from={{ request.path_info }}" id="nav-logout-btn">注销</a></li>
+        {% else %}
+          <li><a href="{% url 'users:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">登录</a></li>
+        <li><a href="{% url 'users:register_page' %}{% block nav_register_ref %}?from={{ request.path_info }}{% endblock %}">注册</a></li>
+        {% endif %}
       </ul>
       <ul class="side-nav" id="mobile-menu">
         <li><a href="{% url 'users:login_page' %}">登录</a></li>
         <li><a href="{% url 'users:register_page' %}">注册</a></li>
-        <li><a href="footer">注销</a></li>
+        <li><a href="{% url 'users:logout' %}">注销</a></li>
       </ul>
     </div>
   </nav>

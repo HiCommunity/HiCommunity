@@ -131,7 +131,6 @@ var csrftoken = $.cookie('csrftoken');
 $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            console.log('Add header');
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
         }
     }
@@ -152,4 +151,63 @@ function remove_loading(css_selector) {
 // For mobile nav
 $(function () {
     $(".button-collapse").sideNav();
+});
+
+
+// url parameters
+(function ($) {
+  $.getUrlParams = function () {
+   var pat = /^https?:\/\/.*\/\?(.*)$/;
+   var l = pat.exec(window.location.href);
+   if (l !== null) return decodeURI(l[1]); return null;
+  };
+  $.getUrlParam = function (name) {
+      var params = $.getUrlParams();
+      if (params) {
+          var result = null;
+          $.each(params.split('&'), function (i, item) {
+              var s = item.split('=');
+              if (s.length > 1 && name === s[0]) {
+                  result = decodeURI(s[1]);
+                  return false;
+              }
+          });
+          return result;
+	  }
+	  return null;
+  }
+ })(jQuery);
+
+
+// logout
+$(function () {
+    var $logout_btn = $('#nav-logout-btn');
+    if ($logout_btn) {
+        $logout_btn.click(function (e) {
+            var $this = $(this);
+            var from_url = $.getUrlParam('from');
+            var href = $this.attr('href');
+            $this.unbind('click');
+            e.preventDefault();
+            $.ajax({
+                url: href,
+                type: 'DELETE',
+                success: function (callback) {
+                    var obj = $.parseJSON(callback);
+                    if (obj.result) {
+                        if (from_url) {
+                            window.location.href = href;
+                        } else {
+                            window.location.href = '/';
+                        }
+                    } else {
+                        Materialize.toast(obj.msg.desc, 3000);
+                    }
+                },
+                compelte: function () {
+                    $this.bind('click');
+                }
+            });
+        });
+    }
 });

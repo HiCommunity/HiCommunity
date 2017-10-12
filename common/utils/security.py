@@ -4,7 +4,7 @@ import json
 from django.core.urlresolvers import reverse
 from django.shortcuts import HttpResponseRedirect, HttpResponse, Http404
 from users.constants.common import SESSION_LOGIN_USER_ID
-from common.constants.common import RetMsg
+from common.exception import LoginRequired, HiHttp404
 
 
 def md5_encode(string):
@@ -30,8 +30,7 @@ def login_required(func):
             if request.method == 'GET':
                 return HttpResponseRedirect(reverse('users:login'))
             else:
-                return HttpResponse(json.dumps(
-                    {'result': False, 'msg': RetMsg.Users.LOGIN_REQUIRED}))
+                raise LoginRequired
     return inner
 
 
@@ -51,7 +50,6 @@ def request_method(method):
                 if request.method == 'GET':
                     raise Http404
                 else:
-                    return HttpResponse(json.dumps({'result': False,
-                                                    'msg': RetMsg.HTTP.HTTP_404}))
+                    raise HiHttp404
         return method_filter
     return wrapper
