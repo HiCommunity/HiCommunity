@@ -11,19 +11,23 @@ $(function () {
         var $submit_btn = $this.find('button[type=submit]');
         var $password = $this.find('#password');
         var $usernameOrEmail = $this.find('#username-or-email');
-        console.log($usernameOrEmail);
         if (!$usernameOrEmail.val()) {
-            showTooltip({
-                target: $usernameOrEmail,
-                tooltip: '用户名/邮箱不能为空'
-            })
+            $usernameOrEmail.focus();
+            return false;
+        } else if (!$password.val()) {
+            $password.focus();
+            return false;
         }
-        var plain_pwd = $password.val();
-        $password.val(md5(plain_pwd));
-        var data = $this.serialize();
-
-
-        return false;
+        var hashed_password = md5($password.val());
+        $password.val(hashed_password);
+        var checked = $('#remember-me').is(':checked');
+        var data = {
+            'username_or_email': $usernameOrEmail.val(),
+            'password': hashed_password,
+            'checked': checked
+        };
+        $submit_btn.addClass('disabled');
+        addLoadingCover();
         $.ajax({
             url: $this.attr('action'),
             data: data,
@@ -36,14 +40,15 @@ $(function () {
                     } else {
                         window.location.href = '/';
                     }
-
                 } else {
-                    Materialize.toast(obj.msg.desc, 3000);
+                    var msg = translate_exception(obj.msg.code);
+                    Materialize.toast(msg || obj.msg.desc, 3000);
                 }
             },
             complete: function () {
+                $password.val('').focus();
                 $submit_btn.removeClass('disabled');
-                $password.val('');
+                removeLoadingCover();
             }
         });
 

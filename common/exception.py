@@ -13,7 +13,7 @@ Exceptions codes:
 
 class HiException(Exception):
     # Base view exception
-    desc = ''
+    desc = 'Undefined exception'
     code = 0
 
 

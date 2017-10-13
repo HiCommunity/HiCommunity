@@ -1,5 +1,5 @@
-/*
-
+/**
+所有页面或很多页面都会用到
  */
 
 /*!
@@ -136,16 +136,71 @@ $.ajaxSetup({
     }
 });
 
-// loading cover
-function addLoadingCover(css_selector) {
-    var loading_html = '<div class="loading-cover"></div>';
-    $parent_elem = $(css_selector);
-    $parent_elem.prepend(loading_html);
+// dom及jquery对象
+function isDomObject(obj){
+    return ( typeof HTMLElement === 'object' ) ?
+            function(obj){
+                return obj instanceof HTMLElement;
+            } :
+            function(obj){
+                return obj && typeof obj === 'object'
+                    && obj.nodeType === 1
+                    && typeof obj.nodeName === 'string';
+            };
 }
 
-function removeLoadingCover(css_selector) {
-    $parent_elem = $(css_selector) || $('body');
-    $parent_elem.find('.loading-cover').remove();
+function isJQueryObject(obj){
+    return obj instanceof jQuery;
+}
+
+function getJQueryObject(obj){
+    obj = typeof obj === 'string' ? $(obj) : obj;
+    if(isDomObject(obj)) {
+        return  $(obj);
+    } else if (isJQueryObject(obj)) {
+        return obj;
+    }
+    return null;
+}
+
+function getDomObject(obj){
+    // Only support id, class, tag name
+    if (typeof obj === 'string') {
+        if (obj.split(' ').length === 1) {
+            if (obj.indexOf('#') === 0) {
+                return document.getElementById(obj);
+            } else if (obj.indexOf('.')) {
+                return document.getElementsByClassName(obj);
+            } else {
+                // TODO: other situation
+                document.getElementsByTagName(obj);
+            }
+        }
+    } else if (isDomObject(obj)) {
+        return  obj;
+    } else if (isJQueryObject(obj)) {
+        return obj.get(0);
+    }
+    return null;
+}
+
+
+function addLoadingCover(obj) {
+    /*
+     Append a loading cover to an object
+     */
+    var loading_html = '<div class="loading-cover"></div>';
+    var _obj = obj || 'body';
+    var $parent_elem = getJQueryObject(_obj);
+    $(loading_html).hide().appendTo($parent_elem).fadeIn('slow');
+}
+
+function removeLoadingCover(obj) {
+    var _obj = obj ? obj : 'body';
+    var $parent_elem = getJQueryObject(_obj);
+    console.log($parent_elem);
+    console.log($parent_elem.children('.loading-cover'));
+    $parent_elem.children('.loading-cover').fadeOut('fast').remove();
 }
 
 // For mobile nav initialization
@@ -156,26 +211,26 @@ $(function () {
 
 // url parameters
 (function ($) {
-  $.getUrlParams = function () {
-   var pat = /^https?:\/\/.*\/\?(.*)$/;
-   var l = pat.exec(window.location.href);
-   if (l !== null) return decodeURI(l[1]); return null;
-  };
-  $.getUrlParam = function (name) {
-      var params = $.getUrlParams();
-      if (params) {
-          var result = null;
-          $.each(params.split('&'), function (i, item) {
-              var s = item.split('=');
-              if (s.length > 1 && name === s[0]) {
-                  result = decodeURI(s[1]);
-                  return false;
-              }
-          });
-          return result;
-	  }
-	  return null;
-  }
+    $.getUrlParams = function () {
+        var pat = /^https?:\/\/.*\/\?(.*)$/;
+        var l = pat.exec(window.location.href);
+        if (l !== null) return decodeURI(l[1]); return null;
+    };
+    $.getUrlParam = function (name) {
+        var params = $.getUrlParams();
+        if (params) {
+            var result = null;
+            $.each(params.split('&'), function (i, item) {
+                var s = item.split('=');
+                if (s.length > 1 && name === s[0]) {
+                    result = decodeURI(s[1]);
+                    return false;
+                }
+            });
+            return result;
+        }
+        return null;
+    }
  })(jQuery);
 
 
@@ -211,3 +266,20 @@ $(function () {
         });
     }
 });
+
+
+function translate_exception(msgCode) {
+    /*
+     translation exception message to Chinese
+     obj is an object like {1001: '用户名或邮箱格式错误', ...}
+     msgCode received from json is sent by server
+     */
+    var msg = '';
+    $.each(exceptionTrans, function (k, v) {
+        if (k == parseInt(msgCode)) {
+            msg = v;
+            return false;
+        }
+    });
+    return msg;
+}

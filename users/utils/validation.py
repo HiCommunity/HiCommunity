@@ -8,13 +8,14 @@ EMAIL_PAT = '^[a-zA-Z0-9_-]+\@[a-zA-Z0-9_-]+\.[a-zA-Z0-9]{2,4}$'
 def validate_username(username):
     return True if (username
                     and isinstance(username, str)
-                    and 4 <= count_string_len(username) <= 16) else False
+                    and 4 <= count_string_len(username) <= 16
+                    and re.match('^[^!@#$%^&*()\[\]{}<>,.?\\\\|/`~-]+$', username)) else False
 
 
 def validate_password(password):
     return True if (password
                     and isinstance(password, str)
-                    and re.match('\w{8,}', password)) else False
+                    and re.match('^[^\\\]{8,32}$', password)) else False
 
 
 def validate_email(email):

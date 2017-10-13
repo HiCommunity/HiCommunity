@@ -1,7 +1,8 @@
 {% extends 'common/base.html' %}
 {% load staticfiles %}
+{% block title %}登录{% endblock %}
 {% block css %}
-  <link href="{% static 'css/users/login.css' %}" rel="stylesheet">
+  <link href="{% static 'css/users/login.css' %}?v=1" rel="stylesheet">
 {% endblock %}
 
 {% block nav_login_ref %}{% endblock %} {# remove parameters #}
@@ -52,5 +53,4 @@
 {% block js %}
   <script src="{% static 'js/users/login.js' %}?v=2"></script>
   <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
-  <script src="{% static 'js/common/utils.js' %}"></script>
 {% endblock %}

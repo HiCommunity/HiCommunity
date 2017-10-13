@@ -27,8 +27,8 @@ def register(request):
     username = request.POST.get('username', '').strip()
     email = request.POST.get('email', '').strip()
     # validation
-    if (not validation.validate_username(username) or
-            not validation.validate_email(email)):
+    if (not validation.validate_username(username)
+            or not validation.validate_email(email)):
         raise InvalidUsernameOrEmailFormat
     elif not validation.validate_password(password):
         raise InvalidPasswordFormat
@@ -84,8 +84,8 @@ def login(request):
                 # login successfully
                 if not checked:
                     request.session.set_expiry(0)
-                request.session[SESSION_LOGIN_USER_ID] = user_objects.id
-                request.session[SESSION_LOGIN_USER_NAME] = user_objects.username
+                request.session[SESSION_LOGIN_USER_ID] = user_object.id
+                request.session[SESSION_LOGIN_USER_NAME] = user_object.username
                 ret['result'] = True
             else:
                 raise InvalidPassword

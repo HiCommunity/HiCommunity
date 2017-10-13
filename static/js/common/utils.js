@@ -1,5 +1,5 @@
-/*
-工具集
+/**
+不常用工具集
  */
 
 
@@ -12,47 +12,10 @@ function getStringLen(str) {
     return str.replace(/[^\x00-\xff]/g,"01").length;
 }
 
-// dom及jquery对象
-function isDomObject(obj){
-    return ( typeof HTMLElement === 'object' ) ?
-            function(obj){
-                return obj instanceof HTMLElement;
-            } :
-            function(obj){
-                return obj && typeof obj === 'object'
-                    && obj.nodeType === 1
-                    && typeof obj.nodeName === 'string';
-            };
-}
-function isJQueryObject(obj){
-    return obj instanceof jQuery;
-}
-function getJQueryObject(obj){
-    obj = typeof obj === 'string' ? $(obj) : obj;
-    if(isDomObject(obj)) {
-        return  $(obj);
-    } else if (isJQueryObject(obj)) {
-        return obj;
-    }
-    return null;
-}
-function getDomObject(obj){
-    //
-    if (typeof obj === 'string') {
-        if (obj.split(' ').length === 1 && obj.indexOf('.') === 0) {
-            obj = document.getElementById(obj)
-        }
-    } else if (isDomObject(obj)) {
-        return  obj;
-    } else if (isJQueryObject(obj)) {
-        return obj.get(0);
-    }
-    return null;
-}
 
 /*
 给任意元素添加Material tooltip
-例
+只有鼠标指向的时候才会显示
 showTooltip({
             target: $usernameOrEmail,
             tooltip: '用户名/邮箱不能为空'
@@ -88,3 +51,5 @@ function showTooltip(settings) {
     // remove
     // $obj.tooltip('remove');", 2000);
 }
+
+

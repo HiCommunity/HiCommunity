@@ -7,7 +7,7 @@
   <link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-  <link href="{% static 'css/common/base.css' %}">
+  <link href="{% static 'css/common/base.css' %}" rel="stylesheet">
   {% block css %}{% endblock %}
 </head>
 <body>
@@ -39,7 +39,8 @@
 
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js"></script>
-  <script src="{% static 'js/common/base.js' %}?v=2"></script>
+  <script src="{% static 'js/common/base.js' %}?v=1"></script>
+  <script src="{% static 'js/common/exception_translation.js' %}"></script>
   {% block js %}{% endblock %}
 </body>
 </html>
