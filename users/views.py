@@ -69,7 +69,7 @@ def login(request):
     checked = js_str2bool(request.POST.get('checked'))
 
     # params validation
-    if (not validation.validate_email(username_or_email) or not
+    if (not validation.validate_email(username_or_email) and not
             validation.validate_username(username_or_email)):
         raise InvalidUsernameOrEmailFormat
     elif not validation.validate_password(password):

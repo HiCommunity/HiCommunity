@@ -19,22 +19,23 @@
           <div class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix">account_circle</i>
-              <input id="username" class="validate" name="username" type="text">
-              <label for="username">用户名</label>
+              <input id="username" class="validate" name="username" type="text" minlength="2" maxlength="16">
+              <label for="username" data-error="用户名为4-16个英文或2-8个中文字符">用户名</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix">lock</i>
-              <input id="password" class="validate" name="password" type="password">
-              <label for="password">密码</label>
+              <input id="password" class="validate" name="password"
+                     type="password" data-length="32" maxlength="32" minlength="8">
+              <label for="password" data-error="密码长度为8-32位">密码</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix">email</i>
-              <input id="email" class="validate" name="email" type="email">
-              <label for="email">Email</label>
+              <input id="email" class="validate" name="email" type="email" maxlength="32" required>
+              <label for="email" data-error="请输入正确的邮箱格式">Email</label>
             </div>
           </div>
           <div class="row">
