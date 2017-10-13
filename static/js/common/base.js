@@ -137,18 +137,18 @@ $.ajaxSetup({
 });
 
 // loading cover
-function add_loading(css_selector) {
+function addLoadingCover(css_selector) {
     var loading_html = '<div class="loading-cover"></div>';
-    var $parent_elem = $(css_selector);
+    $parent_elem = $(css_selector);
     $parent_elem.prepend(loading_html);
 }
 
-function remove_loading(css_selector) {
-    var $parent_elem = $(css_selector) || $('body');
+function removeLoadingCover(css_selector) {
+    $parent_elem = $(css_selector) || $('body');
     $parent_elem.find('.loading-cover').remove();
 }
 
-// For mobile nav
+// For mobile nav initialization
 $(function () {
     $(".button-collapse").sideNav();
 });
@@ -204,7 +204,7 @@ $(function () {
                         Materialize.toast(obj.msg.desc, 3000);
                     }
                 },
-                compelte: function () {
+                complete: function () {
                     $this.bind('click');
                 }
             });

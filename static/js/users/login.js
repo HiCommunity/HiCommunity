@@ -4,20 +4,26 @@ For users' login
 
 $(function () {
     $('#login-form').submit(function (e) {
+        // prevent default submit action
+        e.preventDefault();
         var from_url = $.getUrlParam('from');
         var $this = $(this);
         var $submit_btn = $this.find('button[type=submit]');
         var $password = $this.find('#password');
-        var $username_or_email = $this.find('#username-or-email');
+        var $usernameOrEmail = $this.find('#username-or-email');
+        console.log($usernameOrEmail);
+        if (!$usernameOrEmail.val()) {
+            showTooltip({
+                target: $usernameOrEmail,
+                tooltip: '用户名/邮箱不能为空'
+            })
+        }
         var plain_pwd = $password.val();
         $password.val(md5(plain_pwd));
-        var checked = $('#remember-me').is(':checked');
-        var data = {'username_or_email': $username_or_email.val(),
-            'password': md5(plain_pwd),
-            'checked': checked
-        };
-        // prevent default submit action
-        e.preventDefault();
+        var data = $this.serialize();
+
+
+        return false;
         $.ajax({
             url: $this.attr('action'),
             data: data,

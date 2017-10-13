@@ -26,7 +26,8 @@
           <div class="row">
             <div class="input-field col s12">
               <i class="material-icons prefix">lock</i>
-              <input id="password" class="validate" name="password" type="password">
+              <input id="password" class="validate" name="password"
+                     type="password">
               <label for="password">密码</label>
             </div>
           </div>
@@ -51,4 +52,5 @@
 {% block js %}
   <script src="{% static 'js/users/login.js' %}?v=2"></script>
   <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+  <script src="{% static 'js/common/utils.js' %}"></script>
 {% endblock %}
