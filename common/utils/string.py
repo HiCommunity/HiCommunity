@@ -1,5 +1,6 @@
 # coding=utf-8
 import sys
+import re
 
 """
 字符串处理工具
@@ -21,3 +22,23 @@ def count_string_len(string):
         # TODO: 系统编码不为utf-8时
         pass
     return length
+
+
+def str2int(string, default):
+    """
+    String to Integer, like parseInt() in JavaScript
+    :param string:
+    :param default:
+    :return:
+    """
+    if isinstance(string, int):
+        return string
+    else:
+        res = re.findall(r'^([0-9]+)', string)
+        if res:
+            return int(res[0])
+        else:
+            if default and isinstance(default, int):
+                return default
+            else:
+                return

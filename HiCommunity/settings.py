@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'posts',
 ]
 
 MIDDLEWARE = [
@@ -84,10 +85,9 @@ DATABASES = {
         'NAME': 'HiCommunity',
         'USER': 'root',
         'PASSWORD': 'kevin123',
-        'HOST': '192.168.100.11',
+        'HOST': 'localhost',
         'PORT': '3306',
-        'OPTIONS':{ 'init_command': 'SET storage_engine=InnoDB',
-        }
+        # 'OPTIONS': {'init_command': 'SET storage_engine=InnoDB'}
     }
 }
 
