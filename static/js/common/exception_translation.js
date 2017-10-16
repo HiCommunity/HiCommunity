@@ -3,11 +3,6 @@
  */
 
 
-/**
- * Created by Oliver on 2017/10/13 0013.
- */
-
-
 var exceptionTrans = {
 
     // Base

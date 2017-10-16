@@ -15,6 +15,7 @@ def count_string_len(string):
     length = None
     encoding = sys.getdefaultencoding()
     if encoding == 'utf-8':
+        # Linux liked system
         length = len(string.encode('gbk'))
     else:
         # TODO: 系统编码不为utf-8时

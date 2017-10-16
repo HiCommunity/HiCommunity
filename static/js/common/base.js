@@ -276,7 +276,7 @@ function translate_exception(msgCode) {
      */
     var msg = '';
     $.each(exceptionTrans, function (k, v) {
-        if (k == parseInt(msgCode)) {
+        if (parseInt(k) === parseInt(msgCode)) {
             msg = v;
             return false;
         }

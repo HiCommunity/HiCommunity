@@ -2,45 +2,93 @@
 <!DOCTYPE html>
 <html lang="zh-hans">
 <head>
+  {% block meta %}
   <meta charset="UTF-8">
+  {% endblock %}
   <title>{% block title %}HiCommunity{% endblock %}</title>
+  {% block base_css %}
   <link href="https://cdn.bootcss.com/materialize/0.100.2/css/materialize.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-  <link href="{% static 'css/common/base.css' %}" rel="stylesheet">
+  <link href="{% static 'css/common/base.css' %}?v=1" rel="stylesheet">
+  {% endblock %}
   {% block css %}{% endblock %}
 </head>
 <body>
+  {% block header %}
+  <header>
+    {% block nav %}
+    <nav>
+      {% block nav-base %}
+      <div class="nav-wrapper teal lighten-2">
+        <a href="{% url 'index' %}" class="brand-logo">Logo</a>
+        <a href="#" data-activates="mobile-menu" class="button-collapse">
+          <i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          {% if is_login %}
+            <li>Hello, </li>
+            <li><a id="nav-user-btn" href="#">{{ request.session.login_user_name }}</a></li>
+            <li><a href="{% url 'users:logout' %}?from={{ request.path_info }}" id="nav-logout-btn">注销</a></li>
+          {% else %}
+            <li><a href="{% url 'users:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">登录</a></li>
+          <li><a href="{% url 'users:register_page' %}{% block nav_register_ref %}?from={{ request.path_info }}{% endblock %}">注册</a></li>
+          {% endif %}
+        </ul>
+        <ul class="side-nav" id="mobile-menu">
+          <li><a href="{% url 'users:login_page' %}">登录</a></li>
+          <li><a href="{% url 'users:register_page' %}">注册</a></li>
+          <li><a href="{% url 'users:logout' %}">注销</a></li>
+        </ul>
+      </div>
+      {% endblock %}
 
-  <nav>
-    <div class="nav-wrapper teal lighten-2">
-      <a href="{% url 'index' %}" class="brand-logo">Logo</a>
-      <a href="#" data-activates="mobile-menu" class="button-collapse">
-        <i class="material-icons">menu</i></a>
-      <ul class="right hide-on-med-and-down">
-        {% if is_login %}
-          <li>Hello, </li>
-          <li><a href="#">{{ request.session.login_user_name }}</a></li>
-          <li><a href="{% url 'users:logout' %}?from={{ request.path_info }}" id="nav-logout-btn">注销</a></li>
-        {% else %}
-          <li><a href="{% url 'users:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">登录</a></li>
-        <li><a href="{% url 'users:register_page' %}{% block nav_register_ref %}?from={{ request.path_info }}{% endblock %}">注册</a></li>
-        {% endif %}
-      </ul>
-      <ul class="side-nav" id="mobile-menu">
-        <li><a href="{% url 'users:login_page' %}">登录</a></li>
-        <li><a href="{% url 'users:register_page' %}">注册</a></li>
-        <li><a href="{% url 'users:logout' %}">注销</a></li>
-      </ul>
+      {% block nav-left %}{% endblock %}
+
+    </nav>
+    {% endblock %}
+  </header>
+  {% endblock %}
+
+  {% block main %}
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  {% endblock %}
+
+  {% block footer %}
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Footer Content</h5>
+          <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+        </div>
+        <div class="col l4 offset-l2 s12">
+          <h5 class="white-text">Links</h5>
+          <ul>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+            <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </nav>
+    <div class="footer-copyright">
+      <div class="container">
+      © 2014 Copyright Text
+      <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
 
-  {% block content %}{% endblock %}
-
+  {% block base_js %}
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="{% static 'js/common/base.js' %}?v=1"></script>
   <script src="{% static 'js/common/exception_translation.js' %}"></script>
+  {% endblock %}
   {% block js %}{% endblock %}
 </body>
 </html>

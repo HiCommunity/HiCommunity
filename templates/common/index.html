@@ -2,22 +2,7 @@
 
 {% block nav_login_ref %}{% endblock %}
 {% block nav_register_ref %}{% endblock %}
+
 {% block content %}
-<div class="row">
-
-  <div class="col s12 m4 l3">
-    <h3>
-      Hello
-    </h3>
-
-  </div>
-
-  <div class="col s12 m8 l9">
-    <h3>
-      World
-    </h3>
-
-  </div>
-
-</div>
+<h2><a href="{% url 'post:index' %}">论坛首页</a></h2>
 {% endblock %}
