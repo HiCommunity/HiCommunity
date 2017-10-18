@@ -35,6 +35,7 @@ $(function () {
             type: 'POST',
             success: function (callback) {
                 var obj = $.parseJSON(callback);
+                console.log(obj);
                 if (obj.result) {
                     window.location.href = obj.msg.redirect_url;
                 } else {

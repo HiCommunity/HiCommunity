@@ -21,7 +21,6 @@ def validate_password(password):
 
 
 def validate_email(email):
-    a = re.match(EMAIL_PAT, email)
     return True if (email
                     and isinstance(email, str)
                     and re.match(EMAIL_PAT, email)) else False

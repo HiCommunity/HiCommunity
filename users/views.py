@@ -9,7 +9,7 @@ from django.db.models import Q
 from common.constants.common import RET_FORMAT
 from users.utils.security import request_method, login_required
 from users import models as users_models
-from users.constants.common import SESSION_LOGIN_USER_ID, SESSION_LOGIN_USER_NAME
+from users.constants.common import SESSION_LOGIN_USER_ID, SESSION_LOGIN_USER_NAME, SESSION_LOGIN_USER_ROLE
 from users.utils import validation
 from users.exception import *
 from common.utils.js import js_str2bool
@@ -34,12 +34,12 @@ def register(request):
         raise InvalidPasswordFormat
 
     # uniqueness check
-    user_objects = users_models.Profile.objects.filter(Q(username=username) |
+    user_objects = users_models.Account.objects.filter(Q(username=username) |
                                                        Q(email=email))
     if user_objects.count() > 0:
         raise UsernameOrEmailAlreadyExist
     try:
-        users_models.Profile.objects.create(password=password,
+        users_models.Account.objects.create(password=password,
                                             username=username,
                                             email=email)
     except Exception as e:
@@ -47,7 +47,7 @@ def register(request):
         raise UserAccountCreateFailed
     else:
         ret['result'] = True
-        ret['msg']['redirect_url'] = reverse('user:login_page')
+        ret['msg']['redirect_url'] = reverse('account:login_page')
     return HttpResponse(json.dumps(ret))
 
 
@@ -77,7 +77,7 @@ def login(request):
         raise InvalidPasswordFormat
     else:
         username_or_email = username_or_email.strip()
-        user_objects = users_models.Profile.objects.filter(
+        user_objects = users_models.Account.objects.filter(
             Q(email=username_or_email) | Q(username=username_or_email))
         if user_objects.count() == 1:
             user_object = user_objects[0]

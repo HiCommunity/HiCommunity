@@ -43,6 +43,29 @@
 
       </div>
     </div>
+
+    <div class="row">
+      <form id="new-post-form" class="col s12" action="{% url 'post:new' %}">
+        <div class="row">
+          <div class="input-field col s9">
+            <i class="material-icons prefix">mode_edit</i>
+            <input id="icon_prefix" type="text" class="validate" minlength="4">
+            <label for="icon_prefix" data-error="标题至少4位字符">输入标题</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s9">
+            <i class="material-icons prefix">mode_edit</i>
+            <textarea id="post_content" class="materialize-textarea" minlength="20"
+                      maxlength="65535"></textarea>
+            <label for="post_content" data-error="内容至少20个字符">输入内容</label>
+          </div>
+        </div>
+          <button class="btn waves-effect waves-light" type="submit" name="action">发布
+            <i class="material-icons right">send</i>
+          </button>
+      </form>
+    </div>
   </div>
 
 {% endblock %}

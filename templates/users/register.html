@@ -10,7 +10,7 @@
   <div class="container">
     <div class="row">
       <form id="register-form" class="col s12 m6 offset-m3" method="post"
-            action="{% url 'users:register' %}">
+            action="{% url 'account:register' %}">
         {% csrf_token %}
         <div class="card-panel">
           <div class="row">
@@ -51,6 +51,6 @@
 {% endblock %}
 
 {% block js %}
-  <script src="{% static 'js/users/register.js' %}?v=1"></script>
+  <script src="{% static 'js/users/register.js' %}?v=2"></script>
   <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
 {% endblock %}

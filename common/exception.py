@@ -4,7 +4,7 @@
 Exceptions codes:
 1 - 999: Http
 1000 - 1999: users
-
+2000 - 2999: posts
 ...
 
 9000 - 9999: common
@@ -37,5 +37,5 @@ Http exceptions
 
 
 class HiHttp404(HiException):
-    desc = 'error:http 404'
+    desc = 'http 404'
     code = 404

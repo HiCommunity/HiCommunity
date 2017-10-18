@@ -28,16 +28,16 @@
           {% if is_login %}
             <li>Hello, </li>
             <li><a id="nav-user-btn" href="#">{{ request.session.login_user_name }}</a></li>
-            <li><a href="{% url 'users:logout' %}?from={{ request.path_info }}" id="nav-logout-btn">注销</a></li>
+            <li><a href="{% url 'account:logout' %}?from={{ request.path_info }}" id="nav-logout-btn">注销</a></li>
           {% else %}
-            <li><a href="{% url 'users:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">登录</a></li>
-          <li><a href="{% url 'users:register_page' %}{% block nav_register_ref %}?from={{ request.path_info }}{% endblock %}">注册</a></li>
+            <li><a href="{% url 'account:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">登录</a></li>
+          <li><a href="{% url 'account:register_page' %}{% block nav_register_ref %}?from={{ request.path_info }}{% endblock %}">注册</a></li>
           {% endif %}
         </ul>
         <ul class="side-nav" id="mobile-menu">
-          <li><a href="{% url 'users:login_page' %}">登录</a></li>
-          <li><a href="{% url 'users:register_page' %}">注册</a></li>
-          <li><a href="{% url 'users:logout' %}">注销</a></li>
+          <li><a href="{% url 'account:login_page' %}">登录</a></li>
+          <li><a href="{% url 'account:register_page' %}">注册</a></li>
+          <li><a href="{% url 'account:logout' %}">注销</a></li>
         </ul>
       </div>
       {% endblock %}
