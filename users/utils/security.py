@@ -3,8 +3,10 @@ import hashlib
 import json
 from django.core.urlresolvers import reverse
 from django.shortcuts import HttpResponseRedirect, HttpResponse, Http404
-from users.constants.common import SESSION_LOGIN_USER_ID
-from common.exception import LoginRequired, HiHttp404
+from users.constants.common import SESSION_LOGIN_USER_ID, SESSION_LOGIN_USER_ROLE
+from common.exception import HiHttp404
+from users.exception import LoginRequired, UserRoleVerificationFailed
+from common.utils.string import obj2list
 
 
 def md5_encode(string):
@@ -52,4 +54,19 @@ def request_method(method):
                 else:
                     raise HiHttp404
         return method_filter
+    return wrapper
+
+
+def role_restrict(role):
+    """
+    Restrict request by the user's role
+    Role is a string or list/tuple
+    """
+    def wrapper(func):
+        def _restrict(request, *args, **kwargs):
+            if request.session.get(SESSION_LOGIN_USER_ROLE) in obj2list(role):
+                return func(request, *args, **kwargs)
+            else:
+                raise AuthorityVerificationFailed
+        return _restrict
     return wrapper

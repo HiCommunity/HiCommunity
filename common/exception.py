@@ -13,6 +13,8 @@ Exceptions codes:
 
 class HiException(Exception):
     # Base view exception
+    # level: error, warning, info, default
+    level = 'error'
     desc = 'Undefined exception'
     code = 0
 
@@ -26,11 +28,6 @@ System common exceptions
 class CommonException(HiException):
     desc = 'Undefined common exception'
     code = 9000
-
-
-class LoginRequired(HiException):
-    desc = 'error:login required'
-    code = 9001
 
 
 """

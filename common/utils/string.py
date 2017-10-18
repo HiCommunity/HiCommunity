@@ -42,3 +42,13 @@ def str2int(string, default):
                 return default
             else:
                 return
+
+
+def obj2list(obj):
+    """
+    Translate an common object to an iteration object
+    :param obj: str, int, float, list, tuple
+    :param res:
+    :return:
+    """
+    return obj if isinstance(obj, (list, tuple, dict)) else [obj]

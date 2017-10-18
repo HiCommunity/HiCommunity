@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 from __future__ import unicode_literals
 
 import json
@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, HttpResponse
 from django.db.models import Q
 from common.constants.common import RET_FORMAT
-from common.utils.security import request_method, login_required
+from users.utils.security import request_method, login_required
 from users import models as users_models
 from users.constants.common import SESSION_LOGIN_USER_ID, SESSION_LOGIN_USER_NAME
 from users.utils import validation
@@ -34,7 +34,8 @@ def register(request):
         raise InvalidPasswordFormat
 
     # uniqueness check
-    user_objects = users_models.Profile.objects.filter(Q(username=username) | Q(email=email))
+    user_objects = users_models.Profile.objects.filter(Q(username=username) |
+                                                       Q(email=email))
     if user_objects.count() > 0:
         raise UsernameOrEmailAlreadyExist
     try:
@@ -46,7 +47,7 @@ def register(request):
         raise UserAccountCreateFailed
     else:
         ret['result'] = True
-        ret['msg']['redirect_url'] = reverse('users:login_page')
+        ret['msg']['redirect_url'] = reverse('user:login_page')
     return HttpResponse(json.dumps(ret))
 
 

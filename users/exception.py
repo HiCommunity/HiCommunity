@@ -1,15 +1,21 @@
 # coding=utf-8
+"""
+user exception codes: 1000 - 1999
+
+"""
 
 from common.exception import HiException
-
-"""
-code: 1000 - 1999
-"""
 
 
 class UserException(HiException):
     desc = 'Undefined user exception'
     code = 1000
+
+
+""" 
+login, register, logout
+1001 - 1099
+"""
 
 
 class InvalidUsernameOrEmailFormat(HiException):
@@ -50,3 +56,19 @@ class UsernameOrEmailAlreadyExist(HiException):
 class UserLogoutFailed(HiException):
     desc = 'User logout failed'
     code = 1008
+
+
+"""
+Users' privileges
+1901 - 1999
+"""
+
+
+class LoginRequired(HiException):
+    desc = 'Login required'
+    code = 1901
+
+
+class UserRoleVerificationFailed(HiException):
+    desc = 'Authority verification failed'
+    code = 1902

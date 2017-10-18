@@ -20,6 +20,7 @@ from common.views import index
 urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^user/', include('users.urls', namespace='users')),
+    url(r'^account/', include('accounts.urls', namespace='account')),
+    url(r'^user/', include('users.urls', namespace='user')),
     url(r'^post/', include('posts.urls', namespace='post')),
 ]
