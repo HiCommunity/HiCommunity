@@ -30,6 +30,12 @@ class CommonException(HiException):
     code = 9000
 
 
+class EmptyContent(HiException):
+    level = 'warning'
+    desc = 'Empty content is not allowed'
+    code = 9001
+
+
 """
 Http exceptions
 1 - 999

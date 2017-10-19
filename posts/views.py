@@ -5,9 +5,11 @@ from posts import models as posts_models
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from common.utils.string import str2int
 from posts.exception import *
+from common.exception import EmptyContent
 from users.models import Account
 from common.constants.common import RET_FORMAT
 import json
+from posts import views_helper
 
 
 @request_method('GET')
@@ -16,14 +18,16 @@ def post_index(request):
 
 
 @request_method('GET')
-def post_list_page(request, region, board=None):
+def post_list_page(request, region, board):
     """
     Post list page
     """
 
     page = request.GET.get('page')
     items_per_page = str2int(request.GET.get('items', 20), 20)
-    post_objects = posts_models.Post.objects.all().order_by('-create_date')
+    post_objects = posts_models.Post.objects.filter(board__address=board,
+                                                    board__region__address=region
+                                                    ).order_by('-create_date')
 
     # Pagination
     paginator = Paginator(post_objects, items_per_page)
@@ -35,8 +39,9 @@ def post_list_page(request, region, board=None):
         posts = paginator.page(paginator.num_pages)
 
     # context
-    context = {'posts': posts, 'region': region, 'board': board}
-
+    context = {'posts': posts}
+    _ = views_helper.region_and_board_context(region, board)
+    context.update(_)
     return TemplateResponse(request, 'posts/board.html', context=context)
 
 
@@ -55,20 +60,23 @@ def post_detail_page(request, *args, **kwargs):
 
 @login_required
 @request_method('POST')
-def new_post(request, *args, **kwargs):
+def new_post(request, region, board, *args, **kwargs):
     ret = RET_FORMAT
     title = request.POST.get('title')
     content = request.POST.get('content')
     if not all((title, content)):
-        raise EmptyContentIsNotAllowed
+        raise EmptyContent
     uid = kwargs['user_id']
     try:
         posts_models.Post.objects.create(title=title,
                                          content=content,
-                                         owner=Account.objects.get(id=uid))
+                                         owner=Account.objects.get(id=uid),
+                                         board=posts_models.Board.objects.get(address=board))
     except Exception as e:
         print(str(e))
-        raise CreateSubjectFailed
+        raise CreatePostFailed
+    else:
+        ret['result'] = True
     return HttpResponse(json.dumps(ret))
 
 

@@ -7,8 +7,8 @@
 
 {% block nav-left %}
   <ul id="nav-mobile" class="side-nav fixed">
-    <li class="logo" style="text-align:center;margin-top:32px;margin-bottom:140px;"><a id="logo-container" href="/" class="brand-logo">
-        <img style="width:220px;margin-bottom:32px;" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
+    <li class="logo" style="text-align:center;margin-top:32px;margin-bottom:140px;"><a style="font-size: 52px" id="logo-container" href="/" class="brand-logo">
+        Logo
     </a></li>
     <!--<li class="search">
       <div class="search-wrapper card">
@@ -16,28 +16,47 @@
         <div class="search-results"></div>
       </div>
     </li>-->
-    {% for region_item in regions %}
-      {% if region_item.no_board %}
-        <li class="bold"><a href="{% url 'post:list_no_board' region=region_item.address %}"
-                            class="waves-effect waves-teal">{{ region_item.name }}</a></li>
-      {% else %}
-        <li class="no-padding">
-          <ul class="collapsible collapsible-accordion">
-            <li class="bold">
-              <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
-              <div class="collapsible-body">
-                <ul>
-                  {% for board_item in region_item.board_of_region.all %}
-                  <li><a href="{% url 'post:list' region=region_item.address board=board_item.address %}">{{ board_item.name }}</a></li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </li>
-      {% endif %}
-    {% endfor %}
+
+      <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+          {% for region_item in regions %}
+          <li class="bold">
+            <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
+            <div class="collapsible-body">
+              <ul>
+                {% for board_item in region_item.board_of_region.all %}
+                <li><a href="{% url 'post:list' region_item.address board_item.address %}">
+                  {{ board_item.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+
   </ul>
 {% endblock %}
-
-{% block post_js %}{% endblock %}
+{% block content %}
+  <div class="container">
+    {% block post_breadcrumb %}
+    <nav style="margin: 20px 0;">
+      <div class="nav-wrapper">
+        <div class="col s12">
+          <a href="{% url 'post:index' %}" class="breadcrumb">首页</a>
+          <a href="{% url 'post:list' current_region.address current_region.address %}"
+             class="breadcrumb">{{ current_region.name }}</a>
+          <a href="{% if current_region.no_board %}
+            {% url 'post:list_no_board' current_region.address %}
+            {% else %}{% url 'post:list' current_region.address current_board.address %}
+            {% endif %}" class="breadcrumb">{{ current_board.name }}</a>
+        </div>
+      </div>
+    </nav>
+    {% endblock %}
+    {% block post_main_content %}{% endblock %}
+  </div>
+{% endblock %}
+{% block js %}
+  {% block post_js %}{% endblock %}
+{% endblock %}

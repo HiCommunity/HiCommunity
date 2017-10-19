@@ -36,7 +36,7 @@ $(function () {
                 var obj = $.parseJSON(callback);
                 if (obj.result) {
                     if (from_url) {
-                        window.location.href = href;
+                        window.location.href = from_url;
                     } else {
                         window.location.href = '/';
                     }

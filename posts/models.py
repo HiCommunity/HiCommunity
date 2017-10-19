@@ -1,6 +1,6 @@
 # coding=utf-8
 from django.db import models
-from users.models import Profile
+from users.models import Account
 
 
 class Region(models.Model):
@@ -9,7 +9,6 @@ class Region(models.Model):
     """
     name = models.CharField(max_length=32, verbose_name='区域名')
     address = models.CharField(max_length=16, verbose_name='区域URL地址')
-    no_board = models.BooleanField(default=False)
 
     def __unicode__(self):
         return '%s 区域' % self.name
@@ -31,11 +30,10 @@ class Post(models.Model):
     """
     Posts belong to a board
     """
-    region_name = models.CharField(max_length=32, verbose_name='区域名')   # index
-    board_name = models.CharField(max_length=32, verbose_name='版块名')    # index
+    board = models.ForeignKey(to=Board, related_name='post_of_board')
     title = models.CharField(max_length=128, verbose_name='标题')
     content = models.TextField(max_length=65535, verbose_name='内容')
-    owner = models.ForeignKey(to=Profile, related_name='post_owner')
+    owner = models.ForeignKey(to=Account, related_name='post_owner')
     # metadata = models.TextField()
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
@@ -49,11 +47,11 @@ class Reply(models.Model):
     Replies of Posts
     对象为poster owner或回帖中的某人
     """
-    post = models.ForeignKey(to=Post, related_name='post_of_reply')
+    post = models.ForeignKey(to=Post, related_name='reply_of_post')
     content = models.TextField(max_length=65535, verbose_name='内容')
     up = models.PositiveIntegerField()
     down = models.PositiveIntegerField()
-    owner = models.ForeignKey(to=Profile, related_name='reply_owner')
+    owner = models.ForeignKey(to=Account, related_name='reply_owner')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
@@ -66,9 +64,9 @@ class ReplyComment(models.Model):
     """
     Comments of a reply
     """
-    reply = models.ForeignKey(to=Reply, related_name='reply_of_comment')
+    reply = models.ForeignKey(to=Reply, related_name='comment_of_reply')
     content = models.CharField(max_length=512, verbose_name='评论')
-    owner = models.ForeignKey(to=Profile, related_name='reply_comment_owner')
+    owner = models.ForeignKey(to=Account, related_name='reply_comment_owner')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     def __unicode__(self):

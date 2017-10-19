@@ -2,7 +2,7 @@
 from common.exception import HiException
 
 """
-System common exceptions
+Post exceptions
 2000 - 2999
 """
 
@@ -12,13 +12,12 @@ class PostException(HiException):
     code = 2000
 
 
-class EmptyContentIsNotAllowed(HiException):
-    level = 'warning'
-    desc = 'Empty content is not allowed'
-    code = 2001
-
-
-class CreateSubjectFailed(HiException):
-    desc = 'Create subject failed'
+class CreatePostFailed(HiException):
+    desc = 'Create post failed'
     code = 2002
+
+
+class RegionOrBoardNotExist(HiException):
+    desc = 'Region or board not exist'
+    code = 2901
 

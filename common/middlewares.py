@@ -1,6 +1,5 @@
 # coding=utf-8
-# from django.core.urlresolvers import reverse
-# import re
+
 from common.exception import HiException
 from django.shortcuts import HttpResponse
 import json
@@ -39,11 +38,16 @@ class CommonMiddleware(object):
 
     @staticmethod
     def process_template_response(request, response):
+        """
+        Process after executing views
+        :param request:
+        :param response:
+        :return:
+        """
         path_info = request.path_info.strip('/').split('/')
         if path_info[0] == 'post':
-            # post页面加上regions信息
-            regions = posts_models.Region.objects.all()
             if not response.context_data:
                 response.context_data = {}
+            regions = posts_models.Region.objects.all()
             response.context_data['regions'] = regions
         return response
