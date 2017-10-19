@@ -12,6 +12,13 @@ class PostException(HiException):
     code = 2000
 
 
-class BlankContent(HiException):
-    desc = 'Content can not be blank'
+class EmptyContentIsNotAllowed(HiException):
+    level = 'warning'
+    desc = 'Empty content is not allowed'
     code = 2001
+
+
+class CreateSubjectFailed(HiException):
+    desc = 'Create subject failed'
+    code = 2002
+

@@ -4,6 +4,7 @@
 from common.exception import HiException
 from django.shortcuts import HttpResponse
 import json
+from posts import models as posts_models
 
 
 class CommonMiddleware(object):
@@ -38,12 +39,11 @@ class CommonMiddleware(object):
 
     @staticmethod
     def process_template_response(request, response):
-        # urls = (reverse('users:login_page'), reverse('users:register_page'),
-        #         reverse('users:logout'))
-        # content = response.content
-        # for url in urls:
-        #     content = re.sub(r'(<a.*?href="%s)(".*?>)' % url,
-        #                      r'\1?from_url=%s\2' % url, content)
-        # response.content = content
-
+        path_info = request.path_info.strip('/').split('/')
+        if path_info[0] == 'post':
+            # post页面加上regions信息
+            regions = posts_models.Region.objects.all()
+            if not response.context_data:
+                response.context_data = {}
+            response.context_data['regions'] = regions
         return response

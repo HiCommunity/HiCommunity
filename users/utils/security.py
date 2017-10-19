@@ -30,7 +30,7 @@ def login_required(func):
             return func(request, *args, **kwargs)
         else:
             if request.method == 'GET':
-                return HttpResponseRedirect(reverse('users:login'))
+                return HttpResponseRedirect(reverse('account:login'))
             else:
                 raise LoginRequired
     return inner
@@ -67,6 +67,6 @@ def role_restrict(role):
             if request.session.get(SESSION_LOGIN_USER_ROLE) in obj2list(role):
                 return func(request, *args, **kwargs)
             else:
-                raise AuthorityVerificationFailed
+                raise UserRoleVerificationFailed
         return _restrict
     return wrapper

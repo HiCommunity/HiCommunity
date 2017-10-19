@@ -3,10 +3,36 @@ from django.db import models
 from users.models import Profile
 
 
+class Region(models.Model):
+    """
+    Region contains one or more boards
+    """
+    name = models.CharField(max_length=32, verbose_name='区域名')
+    address = models.CharField(max_length=16, verbose_name='区域URL地址')
+    no_board = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return '%s 区域' % self.name
+
+
+class Board(models.Model):
+    """
+    Board
+    """
+    region = models.ForeignKey(to=Region, related_name='board_of_region')
+    name = models.CharField(max_length=32, verbose_name='版块名')
+    address = models.CharField(max_length=16, verbose_name='版块URL地址')
+
+    def __unicode__(self):
+        return '%s 版块' % self.name
+
+
 class Post(models.Model):
     """
-    Posts
+    Posts belong to a board
     """
+    region_name = models.CharField(max_length=32, verbose_name='区域名')   # index
+    board_name = models.CharField(max_length=32, verbose_name='版块名')    # index
     title = models.CharField(max_length=128, verbose_name='标题')
     content = models.TextField(max_length=65535, verbose_name='内容')
     owner = models.ForeignKey(to=Profile, related_name='post_owner')
@@ -43,7 +69,6 @@ class ReplyComment(models.Model):
     reply = models.ForeignKey(to=Reply, related_name='reply_of_comment')
     content = models.CharField(max_length=512, verbose_name='评论')
     owner = models.ForeignKey(to=Profile, related_name='reply_comment_owner')
-    target = models.ForeignKey(to=Profile, related_name='target_of_reply')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     def __unicode__(self):
