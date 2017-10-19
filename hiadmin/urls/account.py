@@ -1,0 +1,10 @@
+# coding=utf-8
+
+from django.conf.urls import url
+
+from hiadmin import views
+
+
+urlpatterns = [
+    url(r'^index/$', views.index, name='index'),
+]

@@ -1,0 +1,75 @@
+{% extends 'posts/base.html' %}
+{% load staticfiles %}
+{% block title %}{% for region_item in regions %}{% ifequal region_item.address region %}{{ region_item.name }} - {{ region_item.board_of_region }}{% endifequal %}{% endfor %}{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col l9 s12">
+        <ul class="collection">
+          <li class="collection-item">Alvin</li>
+          <li class="collection-item">Alvin</li>
+          <li class="collection-item">Alvin</li>
+          <li class="collection-item">Alvin</li>
+          {% for post in posts %}
+            <li class="collection-item">{{ post.title }}</li>
+          {% endfor %}
+        </ul>
+
+        <ul class="pagination">
+          {% if posts.has_previous %}
+          <li class="waves-effect">
+            <a href="?page={{ posts.previous_page_number }}">
+              <i class="material-icons">chevron_left</i></a>
+          </li>
+          {% else %}
+            <li class="waves-effect disabled">
+              <a href="#">
+                <i class="material-icons">chevron_left</i></a>
+            </li>
+          {% endif %}
+          {% for post in posts.paginator.page_range %}
+          {{ post }}
+          {% endfor %}
+
+          {% if posts.has_next %}
+            <li class="waves-effect">
+              <a href="?page={{ posts.next_page_number  }}"><i class="material-icons">chevron_right</i></a></li>
+          {% else %}
+            <li class="waves-effect disabled">
+              <a href="#"><i class="material-icons">chevron_right</i></a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <form id="new-post-form" class="col s12" method="post" action="{% url 'post:new' region board %}">
+        <div class="row">
+          <div class="input-field col s9">
+            <i class="material-icons prefix">mode_edit</i>
+            <input id="new-post-title" type="text" class="validate" minlength="4">
+            <label for="new-post-title" data-error="标题至少4位字符">输入标题</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s9">
+            <i class="material-icons prefix">mode_edit</i>
+            <textarea id="new-post-content" class="materialize-textarea" minlength="20"
+                      maxlength="65535"></textarea>
+            <label for="new-post-content" data-error="内容至少20个字符">输入内容</label>
+          </div>
+        </div>
+          <button id="new-post-submit-btn" class="btn waves-effect waves-light"
+                  type="submit" name="action">发布<i class="material-icons right">send</i>
+          </button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block post_js %}
+  <script src="{% static 'js/posts/board.js' %}"></script>
+{% endblock %}
