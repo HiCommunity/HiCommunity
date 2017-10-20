@@ -1,5 +1,6 @@
 {% extends 'posts/base.html' %}
 {% load staticfiles %}
+{% load my_tags %}
 {% block title %}{{ current_region.name }} - {{ current_region.name }}{% endblock %}
 {% block post_main_content %}
     <div class="row">
@@ -7,24 +8,24 @@
         <ul class="collection">
           {% for post in posts %}
             <li class="collection-item">{{ post.title }}
-              <span class="secondary-content">{{ post.create_date }} BY {{ post.owner.username }}</span></li>
+              <span class="secondary-content">{{ post.create_date|auto_date_format }} BY {{ post.owner.username }}</span></li>
           {% endfor %}
         </ul>
 
         <ul class="pagination">
           {% if posts.has_previous %}
           <li class="waves-effect">
-            <a href="?page={{ posts.previous_page_number }}">
-              <i class="material-icons">chevron_left</i></a>
-          </li>
+            <a href="?page={{ posts.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
           {% else %}
-            <li class="waves-effect disabled">
-              <a href="#">
-                <i class="material-icons">chevron_left</i></a>
-            </li>
+          <li class="waves-effect disabled">
+            <a><i class="material-icons">chevron_left</i></a></li>
           {% endif %}
-          {% for post in posts.paginator.page_range %}
-          {{ post }}
+          {% for page in posts.paginator.page_range %}
+            {% ifequal posts.number page %}
+              <li class="waves-effect active"><a href="?page={{ page }}">{{ page }}</a></li>
+            {% else %}
+              <li class="waves-effect"><a href="?page={{ page }}">{{ page }}</a></li>
+            {% endifequal %}
           {% endfor %}
 
           {% if posts.has_next %}
@@ -32,7 +33,7 @@
               <a href="?page={{ posts.next_page_number  }}"><i class="material-icons">chevron_right</i></a></li>
           {% else %}
             <li class="waves-effect disabled">
-              <a href="#"><i class="material-icons">chevron_right</i></a></li>
+              <a><i class="material-icons">chevron_right</i></a></li>
           {% endif %}
         </ul>
       </div>

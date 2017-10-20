@@ -20,6 +20,7 @@
       <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
           {% for region_item in regions %}
+            {% if region_item.board_of_region.all|length > 0 %}
           <li class="bold">
             <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
             <div class="collapsible-body">
@@ -31,6 +32,7 @@
               </ul>
             </div>
           </li>
+            {% endif %}
           {% endfor %}
         </ul>
       </li>

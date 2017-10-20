@@ -24,7 +24,7 @@ def post_list_page(request, region, board):
     """
 
     page = request.GET.get('page')
-    items_per_page = str2int(request.GET.get('items', 20), 20)
+    items_per_page = str2int(request.GET.get('items', 5), 20)
     post_objects = posts_models.Post.objects.filter(board__address=board,
                                                     board__region__address=region
                                                     ).order_by('-create_date')
