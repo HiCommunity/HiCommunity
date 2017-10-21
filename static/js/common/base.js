@@ -268,10 +268,25 @@ $(function () {
 });
 
 
-function translate_exception(msgCode) {
+(function ($) {
+    $.parseJSONAndTrans = function (jsonObj) {
+        var obj = $.parseJSON(jsonObj);
+        var msgCode = obj.msg.code;
+        if (msgCode) {
+            $.each(exceptionTrans, function (k, v) {
+                if (parseInt(k) === parseInt(msgCode)) {
+                    obj.msg.desc = v;
+                    return false;
+                }
+            });
+        }
+        return obj;
+    };
+ })(jQuery);
+
+function translateException(msgCode) {
     /*
      translation exception message to Chinese
-     obj is an object like {1001: '用户名或邮箱格式错误', ...}
      msgCode received from json is sent by server
      */
     var msg = '';

@@ -2,18 +2,18 @@
 from common.exception import HiException
 
 """
-Post exceptions
+Question exceptions
 2000 - 2999
 """
 
 
-class PostException(HiException):
-    desc = 'Undefined post exception'
+class QuestionException(HiException):
+    desc = 'Undefined question exception'
     code = 2000
 
 
-class CreatePostFailed(HiException):
-    desc = 'Create post failed'
+class CreateQuestionFailed(HiException):
+    desc = 'Create question failed'
     code = 2002
 
 

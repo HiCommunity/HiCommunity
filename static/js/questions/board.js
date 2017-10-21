@@ -3,12 +3,12 @@
  */
 
 $(function () {
-    $('#new-post-form').submit(function (e) {
+    $('#new-question-form').submit(function (e) {
         var $this = $(this);
-        var $newPostTitle = $('#new-post-title');
-        var $newPostContent = $('#new-post-content');
+        var $newQuestionTitle = $('#new-question-title');
+        var $newQuestionContent = $('#new-question-content');
         var input_is_empty = false;
-        $.each([$newPostTitle, $newPostContent], function (i, $item) {
+        $.each([$newQuestionTitle, $newQuestionContent], function (i, $item) {
             if (!$item.val()) {
                 $item.focus();
                 input_is_empty = true;
@@ -22,8 +22,8 @@ $(function () {
             url: $this.attr('action'),
             type: $this.attr('method'),
             data: {
-                'title': $newPostTitle.val(),
-                'content': $newPostContent.val()
+                'title': $newQuestionTitle.val(),
+                'content': $newQuestionContent.val()
             },
             success: function (callback) {
                 var obj = $.parseJSON(callback);
@@ -31,7 +31,7 @@ $(function () {
                 if (obj.result) {
                     window.location.reload();
                 } else {
-                    var msg = translate_exception(obj.msg.code);
+                    var msg = translateException(obj.msg.code);
                     Materialize.toast(msg || obj.msg.desc, 3000);
                 }
             },

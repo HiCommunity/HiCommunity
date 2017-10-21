@@ -1,11 +1,11 @@
-{% extends 'posts/base.html' %}
+{% extends 'questions/base.html' %}
 {% load staticfiles %}
 {% block title %}{{ current_region.name }}{% endblock %}
-{% block post_main_content %}
+{% block question_main_content %}
   {% for region_item in regions %}
     {% ifequal region_item.address current_region.address %}
       {% for board in region_item.board_of_region.all %}
-        <a href="{% url 'post:list' %}"
+        <a href="{% url 'questions:list' %}">{{ board }}</a>
       {% endfor %}
     {% endifequal %}
   {% endfor %}

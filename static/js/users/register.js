@@ -32,14 +32,13 @@ $(function () {
         $.ajax({
             url: $this.attr('action'),
             data: data,
-            type: 'POST',
+            type: $this.attr('method'),
             success: function (callback) {
                 var obj = $.parseJSON(callback);
-                console.log(obj);
                 if (obj.result) {
                     window.location.href = obj.msg.redirect_url;
                 } else {
-                    var msg = translate_exception(obj.msg.code);
+                    var msg = translateException(obj.msg.code);
                     Materialize.toast(msg, 3000);
                 }
             },

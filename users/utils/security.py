@@ -30,7 +30,7 @@ def login_required(func):
             return func(request, *args, **kwargs)
         else:
             if request.method == 'GET':
-                return HttpResponseRedirect(reverse('account:login'))
+                return HttpResponseRedirect(reverse('accounts:login'))
             else:
                 raise LoginRequired
     return inner

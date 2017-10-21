@@ -26,14 +26,14 @@ class Board(models.Model):
         return '%s 版块' % self.name
 
 
-class Post(models.Model):
+class Question(models.Model):
     """
-    Posts belong to a board
+    Questions belong to a board
     """
-    board = models.ForeignKey(to=Board, related_name='post_of_board')
+    board = models.ForeignKey(to=Board, related_name='question_of_board')
     title = models.CharField(max_length=128, verbose_name='标题')
     content = models.TextField(max_length=65535, verbose_name='内容')
-    owner = models.ForeignKey(to=Account, related_name='post_owner')
+    owner = models.ForeignKey(to=Account, related_name='question_owner')
     # metadata = models.TextField()
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
@@ -42,33 +42,33 @@ class Post(models.Model):
         return '%s ...' % self.title if len(self.title) > 20 else self.title
 
 
-class Reply(models.Model):
+class Answer(models.Model):
     """
-    Replies of Posts
-    对象为poster owner或回帖中的某人
+    Replies of Questions
+    对象为question owner或回帖中的某人
     """
-    post = models.ForeignKey(to=Post, related_name='reply_of_post')
+    question = models.ForeignKey(to=Question, related_name='answer_of_question')
     content = models.TextField(max_length=65535, verbose_name='内容')
     up = models.PositiveIntegerField()
     down = models.PositiveIntegerField()
-    owner = models.ForeignKey(to=Account, related_name='reply_owner')
+    owner = models.ForeignKey(to=Account, related_name='answer_owner')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
     def __unicode__(self):
         content = self.content if len(self.content) > 10 else self.content
-        return 'Reply(post id %d): %s ...' % (self.post.id, content)
+        return 'Answer(question id %d): %s ...' % (self.question.id, content)
 
 
-class ReplyComment(models.Model):
+class AnswerComment(models.Model):
     """
-    Comments of a reply
+    Comments to an answer
     """
-    reply = models.ForeignKey(to=Reply, related_name='comment_of_reply')
+    answer = models.ForeignKey(to=Answer, related_name='comment_of_answer')
     content = models.CharField(max_length=512, verbose_name='评论')
-    owner = models.ForeignKey(to=Account, related_name='reply_comment_owner')
+    owner = models.ForeignKey(to=Account, related_name='answer_comment_owner')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     def __unicode__(self):
         content = self.content if len(self.content) > 10 else self.content
-        return 'ReplyComment(reply id %d): %s ...' % (self.reply.id, content)
+        return 'AnswerComment(answer id %d): %s ...' % (self.answer.id, content)

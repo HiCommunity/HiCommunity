@@ -47,7 +47,7 @@ def register(request):
         raise UserAccountCreateFailed
     else:
         ret['result'] = True
-        ret['msg']['redirect_url'] = reverse('account:login_page')
+        ret['msg']['redirect_url'] = reverse('accounts:login_page')
     return HttpResponse(json.dumps(ret))
 
 

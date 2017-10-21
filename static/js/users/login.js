@@ -31,7 +31,7 @@ $(function () {
         $.ajax({
             url: $this.attr('action'),
             data: data,
-            type: 'POST',
+            type: $this.attr('method'),
             success: function (callback) {
                 var obj = $.parseJSON(callback);
                 if (obj.result) {
@@ -41,7 +41,7 @@ $(function () {
                         window.location.href = '/';
                     }
                 } else {
-                    var msg = translate_exception(obj.msg.code);
+                    var msg = translateException(obj.msg.code);
                     Materialize.toast(msg || obj.msg.desc, 3000);
                 }
             },

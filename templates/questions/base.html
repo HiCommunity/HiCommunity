@@ -1,9 +1,9 @@
 {% extends 'common/base.html' %}
 {% load staticfiles %}
 {% block css %}
-  <link href="{% static 'css/posts/base.css' %}" rel="stylesheet">
+  <link href="{% static 'css/questions/base.css' %}" rel="stylesheet">
 {% endblock %}
-{% block post_css %}{% endblock %}
+{% block question_css %}{% endblock %}
 
 {% block nav-left %}
   <ul id="nav-mobile" class="side-nav fixed">
@@ -26,7 +26,7 @@
             <div class="collapsible-body">
               <ul>
                 {% for board_item in region_item.board_of_region.all %}
-                <li><a href="{% url 'post:list' region_item.address board_item.address %}">
+                <li><a href="{% url 'questions:list' region_item.address board_item.address %}">
                   {{ board_item.name }}</a></li>
                 {% endfor %}
               </ul>
@@ -41,24 +41,24 @@
 {% endblock %}
 {% block content %}
   <div class="container">
-    {% block post_breadcrumb %}
+    {% block question_breadcrumb %}
     <nav style="margin: 20px 0;">
       <div class="nav-wrapper">
         <div class="col s12">
-          <a href="{% url 'post:index' %}" class="breadcrumb">首页</a>
-          <a href="{% url 'post:list' current_region.address current_region.address %}"
+          <a href="{% url 'questions:index' %}" class="breadcrumb">首页</a>
+          <a href="{% url 'questions:list' current_region.address current_region.address %}"
              class="breadcrumb">{{ current_region.name }}</a>
           <a href="{% if current_region.no_board %}
-            {% url 'post:list_no_board' current_region.address %}
-            {% else %}{% url 'post:list' current_region.address current_board.address %}
+            {% url 'questions:list_no_board' current_region.address %}
+            {% else %}{% url 'questions:list' current_region.address current_board.address %}
             {% endif %}" class="breadcrumb">{{ current_board.name }}</a>
         </div>
       </div>
     </nav>
     {% endblock %}
-    {% block post_main_content %}{% endblock %}
+    {% block question_main_content %}{% endblock %}
   </div>
 {% endblock %}
 {% block js %}
-  {% block post_js %}{% endblock %}
+  {% block question_js %}{% endblock %}
 {% endblock %}

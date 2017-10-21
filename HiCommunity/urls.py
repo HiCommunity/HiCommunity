@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^hiadmin/', include('hiadmin.urls.account', namespace='hiadmin')),
-    url(r'^account/', include('users.urls.account_urls', namespace='account')),
+    url(r'^accounts/', include('users.urls.account_urls', namespace='accounts')),
     # url(r'^user/', include('users.urls.urls', namespace='user')),
-    url(r'^post/', include('posts.urls', namespace='post')),
+    url(r'^questions/', include('questions.urls', namespace='questions')),
 ]

@@ -4,7 +4,7 @@
 Exceptions codes:
 1 - 999: Http
 1000 - 1999: users
-2000 - 2999: posts
+2000 - 2999: questions
 ...
 
 9000 - 9999: common

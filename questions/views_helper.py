@@ -1,19 +1,16 @@
 # coding=utf-8
-from posts import models as posts_models
-from posts.exception import RegionOrBoardNotExist
+from questions import models as questions_models
+from questions.exception import RegionOrBoardNotExist
 
 
 def region_and_board_context(region, board):
     # add current region and board information
     context = dict()
-    regions = posts_models.Region.objects.all()
+    regions = questions_models.Region.objects.all()
     # context['regions'] = regions
     try:
         context['current_region'] = regions.get(address=region)
-        if board:
-            context['current_board'] = posts_models.Board.objects.get(address=board)
-        else:
-            context['current_board'] = regions.get(address=region)
+        context['current_board'] = questions_models.Board.objects.get(address=board)
     except Exception as e:
         print(str(e))
         raise RegionOrBoardNotExist

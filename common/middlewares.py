@@ -3,7 +3,7 @@
 from common.exception import HiException
 from django.shortcuts import HttpResponse
 import json
-from posts import models as posts_models
+from questions import models as questions_models
 
 
 class CommonMiddleware(object):
@@ -45,9 +45,9 @@ class CommonMiddleware(object):
         :return:
         """
         path_info = request.path_info.strip('/').split('/')
-        if path_info[0] == 'post':
+        if path_info[0] == 'questions':
             if not response.context_data:
                 response.context_data = {}
-            regions = posts_models.Region.objects.all()
+            regions = questions_models.Region.objects.all()
             response.context_data['regions'] = regions
         return response
