@@ -1,4 +1,4 @@
-{% extends 'common/base.html' %}
+{% extends 'users/base.html' %}
 {% load staticfiles %}
 {% block title %}注册{% endblock %}
 {% block css %}
@@ -12,7 +12,7 @@
       <form id="register-form" class="col s12 m6 offset-m3" method="post"
             action="{% url 'accounts:register' %}">
         {% csrf_token %}
-        <div class="card-panel">
+        <div class="card-panel" style="background: rgba(255,255,255,0.85);">
           <div class="row">
             <h4 class="center">注册</h4>
           </div>
@@ -43,6 +43,8 @@
             <button  class="waves-effect waves-light btn col l8 m10 s12 offset-l2 offset-m1"
                      type="submit" name="action">注册</button >
           </div>
+          <div class="divider"></div>
+          <div class="right-align"><a href="{% url 'accounts:login_page' %}">去登录</a></div>
         </div>
 
       </form>

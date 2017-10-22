@@ -4,7 +4,6 @@ from django.conf.urls import url
 
 from hiadmin import views
 
-
 urlpatterns = [
-    url(r'^index/$', views.index, name='index'),
+    # url(r'^$', views.management_index_page, name='management_index_page'),
 ]

@@ -1,15 +1,36 @@
 {% extends 'common/base.html' %}
 {% load staticfiles %}
 {% block css %}
-  <link href="{% static 'css/questions/base.css' %}" rel="stylesheet">
+  <link href="{% static 'css/questions/base.css' %}?v=0" rel="stylesheet">
 {% endblock %}
 {% block question_css %}{% endblock %}
 
-{% block nav-left %}
-  <ul id="nav-mobile" class="side-nav fixed">
-    <li class="logo" style="text-align:center;margin-top:32px;margin-bottom:140px;"><a style="font-size: 52px" id="logo-container" href="/" class="brand-logo">
-        Logo
-    </a></li>
+{% block question_nav %}
+  <nav class="top-nav">
+    <div class="container">
+      <div class="nav-wrapper"><a class="page-title">Navbar</a></div>
+    </div>
+  </nav>
+  <div class="container">
+    <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
+  </div>
+  <ul id="nav-side" class="side-nav fixed">
+    <li>
+      <div class="user-view">
+        <div class="background"><img src="http://materializecss.com/images/office.jpg"></div>
+          {% if is_login %}
+            <a id="nav-username-btn" href="#"><span class="white-text name">{{ request.session.login_user.name }}</span></a>
+            <a id="nav-email-btn" href="#"><span class="white-text email">jdandturk@gmail.com</span></a>
+            <a id="nav-logout-btn" href="{% url 'accounts:logout' %}?from={{ request.path_info }}"><span class="white-text email">注销</span></a>
+          {% else %}
+            <a href="{% url 'accounts:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">
+              <span class="white-text name">登录</span></a>
+            <a href="{% url 'accounts:register_page' %}{% block nav_register_ref %}?from={{ request.path_info }}{% endblock %}">
+              <span class="white-text name">注册</span></a>
+          {% endif %}
+      </div>
+    </li>
+
     <!--<li class="search">
       <div class="search-wrapper card">
         <input id="search"><i class="material-icons">search</i>
@@ -17,25 +38,25 @@
       </div>
     </li>-->
 
-      <li class="no-padding">
-        <ul class="collapsible collapsible-accordion">
-          {% for region_item in regions %}
-            {% if region_item.board_of_region.all|length > 0 %}
-          <li class="bold">
-            <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
-            <div class="collapsible-body">
-              <ul>
-                {% for board_item in region_item.board_of_region.all %}
-                <li><a href="{% url 'questions:list' region_item.address board_item.address %}">
-                  {{ board_item.name }}</a></li>
-                {% endfor %}
-              </ul>
-            </div>
-          </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </li>
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        {% for region_item in regions %}
+          {% if region_item.board_of_region.all|length > 0 %}
+        <li class="bold">
+          <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
+          <div class="collapsible-body">
+            <ul>
+              {% for board_item in region_item.board_of_region.all %}
+              <li><a href="{% url 'questions:list' region_item.address board_item.address %}">
+                {{ board_item.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </li>
 
   </ul>
 {% endblock %}
@@ -60,5 +81,6 @@
   </div>
 {% endblock %}
 {% block js %}
+  <script src="{% static 'js/questions/base.js' %}"></script>
   {% block question_js %}{% endblock %}
 {% endblock %}

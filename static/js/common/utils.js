@@ -52,4 +52,12 @@ function showTooltip(settings) {
     // $obj.tooltip('remove');", 2000);
 }
 
-
+function getRelativeUrl(url) {
+    var _url = url ? url : window.location.href;
+    var resUrl;
+    var res = /^https?:\/\/.*?(\/.*\/).*$/.exec(_url);
+    if (res.length == 2) {
+        resUrl = res[1]
+    }
+    return resUrl;
+}

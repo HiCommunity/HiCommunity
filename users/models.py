@@ -15,7 +15,7 @@ class Account(models.Model):
     state = models.CharField(choices=state_choice, max_length=32,
                              verbose_name='状态', default='normal')
     role_choice = (('user', '用户'), ('admin', '管理员'))
-    role = models.CharField(max_length=32, verbose_name='角色')
+    role = models.CharField(max_length=32, verbose_name='角色', default='user')
 
     def __unicode__(self):
         return '%s_%s' % (self.username, self.email)

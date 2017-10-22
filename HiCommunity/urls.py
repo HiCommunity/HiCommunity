@@ -21,7 +21,7 @@ from common.views import index
 urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^admin/', admin.site.urls),
-    url(r'^hiadmin/', include('hiadmin.urls.account', namespace='hiadmin')),
+    url(r'^hiadmin/', include('hiadmin.urls.urls', namespace='hiadmin')),
     url(r'^accounts/', include('users.urls.account_urls', namespace='accounts')),
     # url(r'^user/', include('users.urls.urls', namespace='user')),
     url(r'^questions/', include('questions.urls', namespace='questions')),

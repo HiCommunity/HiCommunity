@@ -33,6 +33,8 @@ class CommonMiddleware(object):
                         'desc': exception.desc
                     }
                 }))
+            elif request.method == 'GET':
+                pass
             else:
                 pass
 

@@ -1,0 +1,23 @@
+/**
+ * Created by Oliver on 2017/10/18 0018.
+ */
+
+// nav side
+$(function () {
+   var $navSide = $('#nav-side');
+   var $accordionItems = $navSide.find('div.collapsible-body');
+   $.each($accordionItems.find('a'), function (i, item) {
+       var $item = getJQueryObject(item);
+       if ($item.attr('href') == getRelativeUrl()) {
+           $item.parent().parent().parent().slideDown(
+               { duration: 350, easing: "easeOutQuart", queue: false, complete: function () {
+                   $(this).css('height', '');}});
+           // $item.parent().parent().parent().css('display', 'block');
+           $item.parent().addClass('active');
+           $item.parent().parent().parent().prev('a').addClass('active');
+           $item.parent().parent().parent().parent().addClass('active');
+
+       }
+   });
+
+});

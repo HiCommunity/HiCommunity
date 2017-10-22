@@ -1,9 +1,8 @@
 # coding=utf-8
 import hashlib
-import json
 from django.core.urlresolvers import reverse
 from django.shortcuts import HttpResponseRedirect, HttpResponse, Http404
-from users.constants.common import SESSION_LOGIN_USER_ID, SESSION_LOGIN_USER_ROLE
+from users.constants.common import SESSION_LOGIN_USER
 from common.exception import HiHttp404
 from users.exception import LoginRequired, UserRoleVerificationFailed
 from common.utils.string import obj2list
@@ -24,7 +23,7 @@ def login_required(func):
     A decorator for views' function who needs verification of user's login
     """
     def inner(request, *args, **kwargs):
-        user_id = request.session.get(SESSION_LOGIN_USER_ID)
+        user_id = request.session.get(SESSION_LOGIN_USER)
         if user_id:
             kwargs['user_id'] = user_id
             return func(request, *args, **kwargs)
@@ -64,9 +63,15 @@ def role_restrict(role):
     """
     def wrapper(func):
         def _restrict(request, *args, **kwargs):
-            if request.session.get(SESSION_LOGIN_USER_ROLE) in obj2list(role):
+            expect_roles = obj2list(role)
+            if request.session.get(SESSION_LOGIN_USER) in expect_roles:
                 return func(request, *args, **kwargs)
             else:
-                raise UserRoleVerificationFailed
+                if request.method == 'GET':
+                    if 'admin' in expect_roles:
+                        return HttpResponseRedirect(reverse('hiadmin:account:login_page'))
+                else:
+                    raise UserRoleVerificationFailed
+
         return _restrict
     return wrapper

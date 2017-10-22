@@ -9,7 +9,7 @@ from django.db.models import Q
 from common.constants.common import RET_FORMAT
 from users.utils.security import request_method, login_required
 from users import models as users_models
-from users.constants.common import SESSION_LOGIN_USER_ID, SESSION_LOGIN_USER_NAME, SESSION_LOGIN_USER_ROLE
+from users.constants.common import *
 from users.utils import validation
 from users.exception import *
 from common.utils.js import js_str2bool
@@ -60,7 +60,7 @@ def login_page(request):
 @request_method('POST')
 def login(request):
     # handle login user
-    user_id = request.session.get(SESSION_LOGIN_USER_ID)
+    user_id = request.session.get(SESSION_LOGIN_USER)
     if user_id:
         raise UserAlreadyLogin
 
@@ -77,16 +77,20 @@ def login(request):
         raise InvalidPasswordFormat
     else:
         username_or_email = username_or_email.strip()
-        user_objects = users_models.Account.objects.filter(
+        account_objects = users_models.Account.objects.filter(
             Q(email=username_or_email) | Q(username=username_or_email))
-        if user_objects.count() == 1:
-            user_object = user_objects[0]
-            if user_object.password == password:
+        if account_objects.count() == 1:
+            account_object = account_objects[0]
+            if account_object.password == password:
                 # login successfully
                 if not checked:
                     request.session.set_expiry(0)
-                request.session[SESSION_LOGIN_USER_ID] = user_object.id
-                request.session[SESSION_LOGIN_USER_NAME] = user_object.username
+                request.session[SESSION_LOGIN_USER] = {
+                    'id': account_object.id,
+                    'name': account_object.username,
+                    'email': account_object.email,
+                    'role': account_object.role
+                }
                 ret['result'] = True
             else:
                 raise InvalidPassword
@@ -100,7 +104,7 @@ def login(request):
 def logout(request, *args, **kwargs):
     ret = RET_FORMAT
     try:
-        del request.session[SESSION_LOGIN_USER_ID]
+        del request.session[SESSION_LOGIN_USER]
     except Exception as e:
         print('logout failed: %s' % str(e))
         raise UserLogoutFailed
