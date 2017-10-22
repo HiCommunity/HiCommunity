@@ -23,3 +23,34 @@ main {
   text-align: center;
   background: rgba(0,0,0,0.15) url("/static/images/common/spinner/rotate-palette-loader.svg") no-repeat center;
 }
+
+.messages {
+  position: relative;
+  margin: 0;
+  height: 48px;
+  width: 100%;
+  z-index: 999;
+}
+
+.message {
+  position: absolute;
+  height: inherit;
+  width: inherit;
+  line-height: 48px;
+}
+
+.message-debug {
+  background-color: #90a4ae;
+}
+.message-info {
+  background-color: #64b5f6;
+}
+.message-success {
+  background-color: #81c784;
+}
+.message-warning {
+  background-color: #ffb74d;
+}
+.message-error {
+  background-color: #e57373;
+}

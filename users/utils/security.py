@@ -1,11 +1,13 @@
 # coding=utf-8
 import hashlib
 from django.core.urlresolvers import reverse
-from django.shortcuts import HttpResponseRedirect, HttpResponse, Http404
+from django.shortcuts import HttpResponseRedirect, Http404
 from users.constants.common import SESSION_LOGIN_USER
 from common.exception import HiHttp404
 from users.exception import LoginRequired, UserRoleVerificationFailed
 from common.utils.string import obj2list
+from django.contrib import messages
+from common.constants.messages import NOT_ALLOWED_TO_ACCESS, NEED_LOGIN_FIRST
 
 
 def md5_encode(string):
@@ -29,7 +31,8 @@ def login_required(func):
             return func(request, *args, **kwargs)
         else:
             if request.method == 'GET':
-                return HttpResponseRedirect(reverse('accounts:login'))
+                messages.add_message(request, messages.WARNING, NEED_LOGIN_FIRST)
+                return HttpResponseRedirect(reverse('accounts:login_page'))
             else:
                 raise LoginRequired
     return inner
@@ -64,12 +67,13 @@ def role_restrict(role):
     def wrapper(func):
         def _restrict(request, *args, **kwargs):
             expect_roles = obj2list(role)
-            if request.session.get(SESSION_LOGIN_USER) in expect_roles:
+            if request.session.get(SESSION_LOGIN_USER).get('role') in expect_roles:
                 return func(request, *args, **kwargs)
             else:
                 if request.method == 'GET':
                     if 'admin' in expect_roles:
-                        return HttpResponseRedirect(reverse('hiadmin:account:login_page'))
+                        messages.add_message(request, messages.ERROR, NOT_ALLOWED_TO_ACCESS)
+                        return HttpResponseRedirect(reverse('accounts:login_page'))
                 else:
                     raise UserRoleVerificationFailed
 

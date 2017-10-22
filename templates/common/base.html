@@ -11,11 +11,18 @@
     {% block ghpages_css %}<link href="http://materializecss.com/css/ghpages-materialize.css" rel="stylesheet">{% endblock %}
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-  <link href="{% static 'css/common/base.css' %}?v=1" rel="stylesheet">
+  <link href="{% static 'css/common/base.css' %}?v=2" rel="stylesheet">
   {% endblock %}
   {% block css %}{% endblock %}
 </head>
 <body {% block body_tag %}{% endblock %}>
+  {% block messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li class="message white-text center-align {% if message.tags %}message-{{ message.tags }}{% endif %}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endblock %}
   {% block header %}
   <header>
     {% block question_nav %}{% endblock %}
