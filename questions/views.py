@@ -12,6 +12,7 @@ from questions import models as questions_models
 from questions import views_helper
 from questions.exception import *
 from users.models import Account
+from users.constants.common import SESSION_LOGIN_USER
 from users.utils.security import request_method, login_required, role_restrict
 
 
@@ -73,7 +74,7 @@ def new_question(request, region, board, *args, **kwargs):
     content = request.POST.get('content')
     if not all((title, content)):
         raise EmptyContent
-    uid = kwargs['user_id']
+    uid = kwargs[SESSION_LOGIN_USER]['id']
     try:
         questions_models.Question.objects.create(
             title=title,

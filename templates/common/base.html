@@ -17,11 +17,13 @@
 </head>
 <body {% block body_tag %}{% endblock %}>
   {% block messages %}
+    {% if messages %}
     <ul class="messages">
       {% for message in messages %}
       <li class="message white-text center-align {% if message.tags %}message-{{ message.tags }}{% endif %}">{{ message }}</li>
       {% endfor %}
     </ul>
+    {% endif %}
   {% endblock %}
   {% block header %}
   <header>

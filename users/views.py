@@ -25,7 +25,7 @@ def register(request):
     ret = RET_FORMAT
     password = request.POST.get('password')
     username = request.POST.get('username', '').strip()
-    email = request.POST.get('email', '').strip()
+    email = request.POST.get('email', '').strip().lower()
     # validation
     if (not validation.validate_username(username)
             or not validation.validate_email(email)):

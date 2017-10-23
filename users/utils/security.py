@@ -25,9 +25,9 @@ def login_required(func):
     A decorator for views' function who needs verification of user's login
     """
     def inner(request, *args, **kwargs):
-        user_id = request.session.get(SESSION_LOGIN_USER)
-        if user_id:
-            kwargs['user_id'] = user_id
+        login_user = request.session.get(SESSION_LOGIN_USER)
+        if login_user:
+            kwargs[SESSION_LOGIN_USER] = login_user
             return func(request, *args, **kwargs)
         else:
             if request.method == 'GET':

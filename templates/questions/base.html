@@ -20,7 +20,7 @@
         <div class="background"><img src="http://materializecss.com/images/office.jpg"></div>
           {% if is_login %}
             <a id="nav-username-btn" href="#"><span class="white-text name">{{ request.session.login_user.name }}</span></a>
-            <a id="nav-email-btn" href="#"><span class="white-text email">jdandturk@gmail.com</span></a>
+            <a id="nav-email-btn" href="#"><span class="white-text email">{{ request.session.login_user.email }}</span></a>
             <a id="nav-logout-btn" href="{% url 'accounts:logout' %}?from={{ request.path_info }}"><span class="white-text email">注销</span></a>
           {% else %}
             <a href="{% url 'accounts:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">
