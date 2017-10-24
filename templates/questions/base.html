@@ -41,19 +41,21 @@
     <li class="no-padding">
       <ul class="collapsible collapsible-accordion">
         {% for region_item in regions %}
-          {% if region_item.board_of_region.all|length > 0 %}
-        <li class="bold">
-          <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
-          <div class="collapsible-body">
-            <ul>
-              {% for board_item in region_item.board_of_region.all %}
-              <li><a href="{% url 'questions:list' region_item.address board_item.address %}">
-                {{ board_item.name }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-        </li>
-          {% endif %}
+          {% with boards=region_item.board_of_region.all %}
+            {% if boards|length > 0 %}
+            <li class="bold">
+              <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
+              <div class="collapsible-body">
+                <ul>
+                  {% for board_item in boards %}
+                  <li><a href="{% url 'questions:list' region_item.address board_item.address %}">
+                    {{ board_item.name }}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+            {% endif %}
+          {% endwith %}
         {% endfor %}
       </ul>
     </li>
