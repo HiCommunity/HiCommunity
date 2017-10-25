@@ -2,7 +2,7 @@
 import json
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, Http404
 from django.template.response import TemplateResponse
 
 from common.constants.common import RET_FORMAT
@@ -54,16 +54,16 @@ def question_list_page(request, region, board):
 
 
 def question_detail_page(request, *args, **kwargs):
-    pid = kwargs.get('id')
+    pid = kwargs.get('pid')
     try:
         question_object = questions_models.Question.objects.get(id=pid)
     except Exception as e:
         print(str(e))
-        raise
+        raise Http404
 
     context = {'question_detail': question_object}
 
-    return render(request, 'questions/detail.html', context=context)
+    return TemplateResponse(request, 'questions/detail.html', context=context)
 
 
 @login_required

@@ -23,7 +23,7 @@ class Account(models.Model):
 
 class Profile(models.Model):
     """
-    User's profiles
+    User's profiles, merge into account?
     """
     account = models.ForeignKey(to=Account, related_name='profile_of_user')
     username = models.CharField(max_length=16, verbose_name='用户名')

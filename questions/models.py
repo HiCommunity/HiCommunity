@@ -49,8 +49,8 @@ class Answer(models.Model):
     """
     question = models.ForeignKey(to=Question, related_name='answer_of_question')
     content = models.TextField(max_length=65535, verbose_name='内容')
-    up = models.PositiveIntegerField()
-    down = models.PositiveIntegerField()
+    up = models.PositiveIntegerField(default=0)
+    down = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(to=Account, related_name='answer_owner')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
@@ -66,6 +66,7 @@ class AnswerComment(models.Model):
     """
     answer = models.ForeignKey(to=Answer, related_name='comment_of_answer')
     content = models.CharField(max_length=512, verbose_name='评论')
+    up = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(to=Account, related_name='answer_comment_owner')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 

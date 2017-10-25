@@ -8,7 +8,7 @@ $(function () {
    var $accordionItems = $navSide.find('div.collapsible-body');
    $.each($accordionItems.find('a'), function (i, item) {
        var $item = getJQueryObject(item);
-       if ($item.attr('href') == getRelativeUrl()) {
+       if (getRelativeUrl().indexOf($item.attr('href')) == 0) {
            $item.parent().parent().parent().slideDown(
                { duration: 350, easing: "easeOutQuart", queue: false, complete: function () {
                    $(this).css('height', '');}});
@@ -16,7 +16,6 @@ $(function () {
            $item.parent().addClass('active');
            $item.parent().parent().parent().prev('a').addClass('active');
            $item.parent().parent().parent().parent().addClass('active');
-
        }
    });
 

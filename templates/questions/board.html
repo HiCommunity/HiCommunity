@@ -7,7 +7,7 @@
       <div class="col l9 s12">
         <ul class="collection">
           {% for question in questions %}
-            <li class="collection-item">{{ question.title }}
+            <li class="collection-item"><a href="{% url 'questions:detail_page' current_region.address current_board.address question.id %}">{{ question.title }}</a>
               <span class="secondary-content">{{ question.create_date|auto_date_format }} BY {{ question.owner.username }}</span></li>
           {% endfor %}
         </ul>

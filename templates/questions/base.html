@@ -1,5 +1,6 @@
 {% extends 'common/base.html' %}
 {% load staticfiles %}
+{% block materialize_css %}<link href="http://materializecss.com/css/ghpages-materialize.css" rel="stylesheet">{% endblock %}
 {% block css %}
   <link href="{% static 'css/questions/base.css' %}?v=1" rel="stylesheet">
 {% endblock %}
@@ -8,7 +9,7 @@
 {% block question_nav %}
   <nav class="top-nav">
     <div class="container">
-      <div class="nav-wrapper"><a class="page-title">Navbar</a></div>
+      <div class="nav-wrapper"><a class="page-title">{% block question_nav_title %}{% endblock %}</a></div>
     </div>
   </nav>
   <div class="container">
@@ -19,7 +20,7 @@
       <div class="user-view">
         <div class="background"><img src="http://materializecss.com/images/office.jpg"></div>
           {% if is_login %}
-            <a id="nav-username-btn" href="#"><span class="white-text name">{{ request.session.login_user.name }}</span></a>
+            <a id="nav-username-btn" href="#"><span class="white-text name">{% ifequal request.session.login_user.role 'admin' %}<span class="yellow-text" title="管理员">[S]</span> {% endifequal %}{{ request.session.login_user.name }}</span></a>
             <a id="nav-email-btn" href="#"><span class="white-text email">{{ request.session.login_user.email }}</span></a>
             <a id="nav-logout-btn" href="{% url 'accounts:logout' %}?from={{ request.path_info }}"><span class="white-text email">注销</span></a>
           {% else %}
@@ -83,6 +84,6 @@
   </div>
 {% endblock %}
 {% block js %}
-  <script src="{% static 'js/questions/base.js' %}"></script>
+  <script src="{% static 'js/questions/base.js' %}?v=1"></script>
   {% block question_js %}{% endblock %}
 {% endblock %}
