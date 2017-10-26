@@ -13,4 +13,6 @@ urlpatterns = [
         views.question_detail_page, name='detail_page'),
     url(r'^(?P<region>\w+)/(?P<board>\w+)/new_question/$',
         views.new_question, name='new_question'),
+    url(r'^(?P<region>\w+)/(?P<board>\w+)/(?P<qid>\d+)/new_answer/$',
+        views.new_answer, name='new_answer'),
 ]

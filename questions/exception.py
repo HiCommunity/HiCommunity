@@ -17,6 +17,11 @@ class CreateQuestionFailed(HiException):
     code = 2002
 
 
+class CreateAnswerFailed(HiException):
+    desc = 'Create answer failed'
+    code = 2003
+
+
 class RegionOrBoardNotExist(HiException):
     desc = 'Region or board not exist'
     code = 2901

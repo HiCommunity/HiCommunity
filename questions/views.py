@@ -2,7 +2,7 @@
 import json
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, HttpResponse, Http404
+from django.shortcuts import HttpResponse, Http404
 from django.template.response import TemplateResponse
 
 from common.constants.common import RET_FORMAT
@@ -86,6 +86,30 @@ def new_question(request, region, board, *args, **kwargs):
         raise CreateQuestionFailed
     else:
         ret['result'] = True
+    return HttpResponse(json.dumps(ret))
+
+
+@login_required
+@request_method('POST')
+def new_answer(request, region, board, qid, **kwargs):
+    ret = RET_FORMAT
+    content = request.POST.get('content')
+    if not content:
+        raise EmptyContent
+    uid = kwargs[SESSION_LOGIN_USER]['id']
+
+    question_object = questions_models.Question.objects.get(id=qid)
+    account_object = questions_models.Account.objects.get(id=uid)
+    try:
+        questions_models.Answer.objects.create(
+            question=question_object,
+            content=content,
+            owner=account_object
+        )
+        ret['result'] = True
+    except Exception as e:
+        print(str(e))
+        raise CreateAnswerFailed
     return HttpResponse(json.dumps(ret))
 
 
