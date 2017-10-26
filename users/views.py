@@ -105,8 +105,10 @@ def logout(request, *args, **kwargs):
     ret = RET_FORMAT
     try:
         del request.session[SESSION_LOGIN_USER]
+    except KeyError:
+        pass
     except Exception as e:
-        print('logout failed: %s' % str(e))
+        print(str(e))
         raise UserLogoutFailed
     ret['result'] = True
     return HttpResponse(json.dumps(ret))

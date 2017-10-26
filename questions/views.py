@@ -4,11 +4,13 @@ import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import HttpResponse, Http404
 from django.template.response import TemplateResponse
+from django.core.exceptions import ObjectDoesNotExist
 
 from common.constants.common import RET_FORMAT
 from common.exception import EmptyContent
 from common.utils.string import str2int
 from questions import models as questions_models
+from questions.models import Question, Answer
 from questions import views_helper
 from questions.exception import *
 from users.models import Account
@@ -29,7 +31,7 @@ def question_list_page(request, region, board):
 
     page = request.GET.get('page')
     items_per_page = str2int(request.GET.get('items', 5), 20)
-    question_objects = questions_models.Question.objects.filter(
+    question_objects = Question.objects.filter(
         board__address=board,
         board__region__address=region).order_by('-create_date')
 
@@ -56,9 +58,8 @@ def question_list_page(request, region, board):
 def question_detail_page(request, *args, **kwargs):
     pid = kwargs.get('pid')
     try:
-        question_object = questions_models.Question.objects.get(id=pid)
-    except Exception as e:
-        print(str(e))
+        question_object = Question.objects.get(id=pid)
+    except Question.DoesNotExist:
         raise Http404
 
     context = {'question_detail': question_object}
@@ -76,7 +77,7 @@ def new_question(request, region, board, *args, **kwargs):
         raise EmptyContent
     uid = kwargs[SESSION_LOGIN_USER]['id']
     try:
-        questions_models.Question.objects.create(
+        Question.objects.create(
             title=title,
             content=content,
             owner=Account.objects.get(id=uid),
@@ -98,8 +99,11 @@ def new_answer(request, region, board, qid, **kwargs):
         raise EmptyContent
     uid = kwargs[SESSION_LOGIN_USER]['id']
 
-    question_object = questions_models.Question.objects.get(id=qid)
-    account_object = questions_models.Account.objects.get(id=uid)
+    try:
+        question_object = Question.objects.get(id=qid)
+        account_object = Account.objects.get(id=uid)
+    except ObjectDoesNotExist:
+        raise CreateAnswerFailed
     try:
         questions_models.Answer.objects.create(
             question=question_object,
