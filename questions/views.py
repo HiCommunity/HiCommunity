@@ -105,16 +105,25 @@ def new_answer(request, region, board, qid, **kwargs):
     except ObjectDoesNotExist:
         raise CreateAnswerFailed
     try:
-        questions_models.Answer.objects.create(
+        Question.objects.update(
+            answer_count=question_object.answer_count+1)
+        Answer.objects.create(
             question=question_object,
             content=content,
             owner=account_object
         )
+
         ret['result'] = True
     except Exception as e:
         print(str(e))
         raise CreateAnswerFailed
     return HttpResponse(json.dumps(ret))
+
+
+@login_required
+@request_method('POST')
+def new_comment(request, region, board, qid, **kwargs):
+    pass
 
 
 @login_required

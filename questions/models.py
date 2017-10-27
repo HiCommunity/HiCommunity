@@ -34,6 +34,7 @@ class Question(models.Model):
     title = models.CharField(max_length=128, verbose_name='标题')
     content = models.TextField(max_length=65535, verbose_name='内容')
     owner = models.ForeignKey(to=Account, related_name='question_owner')
+    answer_count = models.IntegerField(default=0, verbose_name='回答数')
     # metadata = models.TextField()
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
@@ -52,6 +53,7 @@ class Answer(models.Model):
     up = models.PositiveIntegerField(default=0)
     down = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(to=Account, related_name='answer_owner')
+    comment_count = models.IntegerField(default=0, verbose_name='评论数')
     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 

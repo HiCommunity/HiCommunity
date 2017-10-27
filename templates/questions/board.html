@@ -9,7 +9,8 @@
         <ul class="collection">
           {% for question in questions %}
             <li class="collection-item"><a href="{% url 'questions:detail_page' current_region.address current_board.address question.id %}">{{ question.title }}</a>
-              <span class="secondary-content">{{ question.create_date|naturaltime }} BY {{ question.owner.username }}</span></li>
+              <span class="new badge" data-badge-caption="回答">{{ question.answer_count }}</span>
+              <span class="secondary-content">{{ question.create_date|naturaltime }} <a href="#">{{ question.owner.username }}</a></span></li>
           {% endfor %}
         </ul>
 
