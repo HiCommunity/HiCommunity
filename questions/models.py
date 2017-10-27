@@ -60,7 +60,7 @@ class Answer(models.Model):
         return 'Answer(question id %d): %s ...' % (self.question.id, content)
 
 
-class AnswerComment(models.Model):
+class Comment(models.Model):
     """
     Comments to an answer
     """
