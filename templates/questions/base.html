@@ -1,6 +1,6 @@
 {% extends 'common/base.html' %}
 {% load staticfiles %}
-{% block materialize_css %}<link href="http://materializecss.com/css/ghpages-materialize.css" rel="stylesheet">{% endblock %}
+{% block materialize_css %}<link href="{% static 'css/common/ghpages-materialize.css' %}" rel="stylesheet" type="text/css" media="screen,projection">{% endblock %}
 {% block css %}
   <link href="{% static 'css/questions/base.css' %}?v=2" rel="stylesheet">
   {% block question_css %}{% endblock %}
