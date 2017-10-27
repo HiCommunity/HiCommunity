@@ -1,0 +1,25 @@
+/*
+
+ */
+
+i.show-comment {
+  cursor: pointer;
+}
+
+.rotate-0 {
+  -moz-transform: rotate(0);
+  -webkit-transform: rotate(0);
+  -o-transform: rotate(0);
+  -ms-transform: rotate(0);
+  transform: rotate(0);
+  transition-duration: .3s;
+}
+
+.rotate-90 {
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+  transition-duration: .3s;
+}

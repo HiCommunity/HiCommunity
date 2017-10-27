@@ -1,6 +1,9 @@
 {% extends 'questions/base.html' %}
 {% load staticfiles %}
 {% block question_nav_title %}{{ question_detail.title }}{% endblock %}
+{% block question_css %}
+  <link href="{% static 'css/questions/detail.css' %}?v=1" rel="stylesheet">
+{% endblock %}
 {% block content %}
   <div class="container">
     {% with answers=question_detail.answer_of_question.all %}
@@ -19,13 +22,15 @@
         <div class="divider" style="margin: 30px 0;"></div>
         <div>{% if answers|length > 0 %}{{ answers|length }} 个回答{% else %}暂无回答{% endif %}</div>
         {% for answer in answers %}
-          <div id="answer{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
-            <div>
-              {{ answer.content }}
-            </div>
+          <div id="{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
+            <div>{{ answer.content|safe }}</div>
             <div class="right-align">
               <span class="grey-text">{{ answer.owner.username }} {{ answer.create_date }}</span>
             </div>
+            <div class="right-align">
+              <i class="material-icons grey-text show-comment">expand_more</i>
+            </div>
+
           </div>
         {% endfor %}
 
