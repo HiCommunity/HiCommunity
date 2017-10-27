@@ -2,9 +2,9 @@
 {% load staticfiles %}
 {% block materialize_css %}<link href="http://materializecss.com/css/ghpages-materialize.css" rel="stylesheet">{% endblock %}
 {% block css %}
-  <link href="{% static 'css/questions/base.css' %}?v=1" rel="stylesheet">
+  <link href="{% static 'css/questions/base.css' %}?v=2" rel="stylesheet">
+  {% block question_css %}{% endblock %}
 {% endblock %}
-{% block question_css %}{% endblock %}
 
 {% block question_nav %}
   <nav class="top-nav">
