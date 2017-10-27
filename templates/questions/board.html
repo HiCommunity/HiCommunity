@@ -1,5 +1,6 @@
 {% extends 'questions/base.html' %}
 {% load staticfiles %}
+{% load humanize %}
 {% load my_tags %}
 {% block title %}{{ current_region.name }} - {{ current_board.name }}{% endblock %}
 {% block question_main_content %}
@@ -8,7 +9,7 @@
         <ul class="collection">
           {% for question in questions %}
             <li class="collection-item"><a href="{% url 'questions:detail_page' current_region.address current_board.address question.id %}">{{ question.title }}</a>
-              <span class="secondary-content">{{ question.create_date|auto_date_format }} BY {{ question.owner.username }}</span></li>
+              <span class="secondary-content">{{ question.create_date|naturaltime }} BY {{ question.owner.username }}</span></li>
           {% endfor %}
         </ul>
 
