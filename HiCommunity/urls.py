@@ -16,6 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from common.views import index
+from HiCommunity.settings import DEBUG, MEDIA_URL, MEDIA_ROOT
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -26,3 +28,6 @@ urlpatterns = [
     # url(r'^user/', include('users.urls.urls', namespace='user')),
     url(r'^questions/', include('questions.urls', namespace='questions')),
 ]
+
+if DEBUG:
+    urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

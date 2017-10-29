@@ -9,7 +9,7 @@
 {% block question_nav %}
   <nav class="top-nav">
     <div class="container">
-      <div class="nav-wrapper"><a class="page-title">{% block question_nav_title %}{% endblock %}</a></div>
+      <div class="nav-wrapper"><a class="page-title truncate">{% block question_nav_title %}{% endblock %}</a></div>
     </div>
   </nav>
   <div class="container">
@@ -19,10 +19,14 @@
     <li>
       <div class="user-view">
         <div class="background"><img src="http://materializecss.com/images/office.jpg"></div>
+
           {% if is_login %}
-            <a id="nav-username-btn" href="#"><span class="white-text name">{% ifequal request.session.login_user.role 'admin' %}<span class="yellow-text" title="管理员">[S]</span> {% endifequal %}{{ request.session.login_user.name }}</span></a>
-            <a id="nav-email-btn" href="#"><span class="white-text email">{{ request.session.login_user.email }}</span></a>
+            {% with user=request.session.login_user %}
+            <a id="nav-avatar" href="#" title="Hello {{ user.name }}"><img src="{{ user.avatar.thumb_small }}" alt="User Avatar"></a>
+            <a id="nav-username-btn" href="#"><span class="white-text name">{% ifequal user.role 'admin' %}<span class="yellow-text" title="管理员">[S]</span> {% endifequal %}{{ user.name }}</span></a>
+            <a id="nav-email-btn" href="#"><span class="white-text email">{{ user.email }}</span></a>
             <a id="nav-logout-btn" href="{% url 'accounts:logout' %}?from={{ request.path_info }}"><span class="white-text email">注销</span></a>
+            {% endwith %}
           {% else %}
             <a href="{% url 'accounts:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">
               <span class="white-text name">登录</span></a>

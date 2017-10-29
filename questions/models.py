@@ -11,7 +11,7 @@ class Region(models.Model):
     address = models.CharField(max_length=16, verbose_name='区域URL地址')
 
     def __unicode__(self):
-        return '%s 区域' % self.name
+        return '%s Region' % self.name
 
 
 class Board(models.Model):
@@ -22,8 +22,8 @@ class Board(models.Model):
     name = models.CharField(max_length=32, verbose_name='版块名')
     address = models.CharField(max_length=16, verbose_name='版块URL地址')
 
-    def __unicode__(self):
-        return '%s 版块' % self.name
+    def __str__(self):
+        return '%s Board' % self.name
 
 
 class Question(models.Model):
@@ -36,11 +36,14 @@ class Question(models.Model):
     owner = models.ForeignKey(to=Account, related_name='question_owner')
     answer_count = models.IntegerField(default=0, verbose_name='回答数')
     # metadata = models.TextField()
-    create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s ...' % self.title if len(self.title) > 20 else self.title
+
+    class Meta:
+        ordering = ('-update_at',)
 
 
 class Answer(models.Model):
@@ -54,10 +57,10 @@ class Answer(models.Model):
     down = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(to=Account, related_name='answer_owner')
     comment_count = models.IntegerField(default=0, verbose_name='评论数')
-    create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    update_date = models.DateTimeField(auto_now=True, verbose_name='修改时间')
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    update_at = models.DateTimeField(auto_now=True, verbose_name='修改时间')
 
-    def __unicode__(self):
+    def __str__(self):
         content = self.content if len(self.content) > 10 else self.content
         return 'Answer(question id %d): %s ...' % (self.question.id, content)
 
@@ -70,8 +73,8 @@ class Comment(models.Model):
     content = models.CharField(max_length=512, verbose_name='评论')
     up = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(to=Account, related_name='answer_comment_owner')
-    create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
-    def __unicode__(self):
+    def __str__(self):
         content = self.content if len(self.content) > 10 else self.content
-        return 'AnswerComment(answer id %d): %s ...' % (self.answer.id, content)
+        return 'Comment(answer id %d): %s ...' % (self.answer.id, content)

@@ -53,11 +53,6 @@ class UsernameOrEmailAlreadyExist(HiException):
     code = 1007
 
 
-class UserLogoutFailed(HiException):
-    desc = 'User logout failed'
-    code = 1008
-
-
 """
 Users' privileges
 1901 - 1999

@@ -5,10 +5,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import HttpResponse, Http404
 from django.template.response import TemplateResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
+from datetime import datetime
 
 from common.constants.common import RET_FORMAT
 from common.exception import EmptyContent
-from common.utils.string import str2int
+from common.utils.string_ import str2int
 from questions import models as questions_models
 from questions.models import Question, Answer
 from questions import views_helper
@@ -33,7 +35,7 @@ def question_list_page(request, region, board):
     items_per_page = str2int(request.GET.get('items', 5), 20)
     question_objects = Question.objects.filter(
         board__address=board,
-        board__region__address=region).order_by('-create_date')
+        board__region__address=region)
 
     # Pagination
     paginator = Paginator(question_objects, items_per_page)
@@ -98,21 +100,10 @@ def new_answer(request, region, board, qid, **kwargs):
     if not content:
         raise EmptyContent
     uid = kwargs[SESSION_LOGIN_USER]['id']
-
     try:
-        question_object = Question.objects.get(id=qid)
-        account_object = Account.objects.get(id=uid)
-    except ObjectDoesNotExist:
-        raise CreateAnswerFailed
-    try:
-        Question.objects.update(
-            answer_count=question_object.answer_count+1)
-        Answer.objects.create(
-            question=question_object,
-            content=content,
-            owner=account_object
-        )
-
+        Question.objects.filter(id=qid).update(answer_count=F('answer_count') + 1,
+                                               update_at=datetime.utcnow())
+        Answer.objects.create(question_id=qid, content=content, owner_id=uid)
         ret['result'] = True
     except Exception as e:
         print(str(e))

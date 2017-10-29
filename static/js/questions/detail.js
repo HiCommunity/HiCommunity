@@ -61,9 +61,10 @@ $(function () {
         var $this = $(this);
         var $section = $this.parent().parent();
         var answerId = $section.attr('id');
+        var baseUrl = getRelativeUrl();
 
         var textArea = '<div class="row comment-wrapper">\n' +
-            '  <form class="col s12 comment-form">\n' +
+            '  <form class="col s12 comment-form" action="' + baseUrl + 'new_comment">\n' +
             '    <div class="row">\n' +
             '      <div class="input-field col s12">\n' +
             '        <textarea id="textarea-' + answerId + '" class="materialize-textarea" minlength="10"></textarea>\n' +

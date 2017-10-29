@@ -14,7 +14,7 @@
             {{ question_detail.content }}
           </div>
           <div class="right-align">
-            <span class="grey-text">{{ question_detail.owner.username }} {{ question_detail.create_date }}</span>
+            <span class="grey-text">{{ question_detail.owner.username }} {{ question_detail.create_at }}</span>
           </div>
 
         </div>
@@ -25,7 +25,7 @@
           <div id="{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
             <div>{{ answer.content|safe }}</div>
             <div class="right-align">
-              <span class="grey-text">{{ answer.owner.username }} {{ answer.create_date }}</span>
+              <span class="grey-text">{{ answer.owner.username }} {{ answer.create_at }}</span>
             </div>
             <div class="right-align">
               <i class="material-icons grey-text show-comment">expand_more</i>
@@ -70,5 +70,5 @@
   </div>
 {% endblock %}
 {% block question_js %}
-  <script src="{% static 'js/questions/detail.js' %}?v=1"></script>
+  <script src="{% static 'js/questions/detail.js' %}?v=0"></script>
 {% endblock %}
