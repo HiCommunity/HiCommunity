@@ -33,7 +33,8 @@ class Avatar(object):
                  (1, 3, 5),
                  (1, 5),
                  (2, 4),
-                 (3,))
+                 (3,),
+                 ())
         return random.choice(modes)
 
     @staticmethod
