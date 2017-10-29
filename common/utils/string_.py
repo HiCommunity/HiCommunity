@@ -7,7 +7,7 @@ import re
 """
 
 
-def count_string_len(string):
+def string_len(string):
     """
     中文/其他非ASCII字符按照2个英文字符算
     :param string:

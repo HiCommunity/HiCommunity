@@ -5,7 +5,7 @@ from django.shortcuts import HttpResponseRedirect, Http404
 from users.constants.common import SESSION_LOGIN_USER
 from common.exception import HiHttp404
 from users.exception import LoginRequired, UserRoleVerificationFailed
-from common.utils.string import obj2list
+from common.utils.string_ import obj2list
 from django.contrib import messages
 from common.constants.messages import NOT_ALLOWED_TO_ACCESS, NEED_LOGIN_FIRST
 
@@ -42,9 +42,11 @@ def request_method(method):
     """
     A decoration to ensure the request run in a designated way.
     You need pass a string argument in 'POST', 'GET', 'PUT', 'DELETE'
+    All methods are 'get', 'post', 'put', 'patch', 'delete', 'head',
+        'options', 'trace'
     """
-    assert method in ('POST', 'GET', 'PUT', 'DELETE')
     method = method.upper()
+    assert method in ('POST', 'GET', 'PUT', 'DELETE')
 
     def wrapper(func):
         def method_filter(request, *args, **kwargs):
@@ -72,7 +74,8 @@ def role_restrict(role):
             else:
                 if request.method == 'GET':
                     if 'admin' in expect_roles:
-                        messages.add_message(request, messages.ERROR, NOT_ALLOWED_TO_ACCESS)
+                        messages.add_message(request, messages.ERROR,
+                                             NOT_ALLOWED_TO_ACCESS)
                         return HttpResponseRedirect(reverse('accounts:login_page'))
                 else:
                     raise UserRoleVerificationFailed

@@ -16,19 +16,22 @@ class Account(models.Model):
                              verbose_name='状态', default='normal')
     role_choice = (('user', '用户'), ('admin', '管理员'))
     role = models.CharField(max_length=32, verbose_name='角色', default='user')
+    create_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
-    def __unicode__(self):
+    # Base avatar address
+    avatar = models.ImageField(verbose_name='头像', blank=True)
+    avatar_thumb_big = models.ImageField(verbose_name='头像缩略图大', blank=True)
+    avatar_thumb_small = models.ImageField(verbose_name='头像缩略图小', blank=True)
+
+    def __str__(self):
         return '%s_%s' % (self.username, self.email)
 
 
 class Profile(models.Model):
     """
-    User's profiles, merge into account?
+    Profile of users
     """
-    account = models.ForeignKey(to=Account, related_name='profile_of_user')
-    username = models.CharField(max_length=16, verbose_name='用户名')
     sex_choice = (('male', '男'), ('female', '女'))
     sex = models.CharField(choices=sex_choice, max_length=4, blank=True)
-    birthday = models.DateField(verbose_name='生日', blank=True)
+    # birthday = models.DateField(verbose_name='生日', blank=True)
     address = models.CharField(max_length=128, verbose_name='地址', blank=True)
-
