@@ -7,7 +7,7 @@ from common.exception import HiHttp404
 from users.exception import LoginRequired, UserRoleVerificationFailed
 from common.utils.string_ import obj2list
 from django.contrib import messages
-from common.constants.messages import NOT_ALLOWED_TO_ACCESS, NEED_LOGIN_FIRST
+from common.constants.messages import Privileges
 
 
 def md5_encode(string):
@@ -24,18 +24,18 @@ def login_required(func):
     """
     A decorator for views' function who needs verification of user's login
     """
-    def inner(request, *args, **kwargs):
+    def required_inner(request, *args, **kwargs):
         login_user = request.session.get(SESSION_LOGIN_USER)
         if login_user:
             kwargs[SESSION_LOGIN_USER] = login_user
             return func(request, *args, **kwargs)
         else:
             if request.method == 'GET':
-                messages.add_message(request, messages.WARNING, NEED_LOGIN_FIRST)
+                messages.add_message(request, messages.WARNING, Privileges.NEED_LOGIN_FIRST)
                 return HttpResponseRedirect(reverse('accounts:login_page'))
             else:
                 raise LoginRequired
-    return inner
+    return required_inner
 
 
 def request_method(method):
@@ -75,7 +75,7 @@ def role_restrict(role):
                 if request.method == 'GET':
                     if 'admin' in expect_roles:
                         messages.add_message(request, messages.ERROR,
-                                             NOT_ALLOWED_TO_ACCESS)
+                                             Privileges.NOT_ALLOWED_TO_ACCESS)
                         return HttpResponseRedirect(reverse('accounts:login_page'))
                 else:
                     raise UserRoleVerificationFailed

@@ -203,11 +203,6 @@ function removeLoadingCover(obj) {
     $parent_elem.children('.loading-cover').fadeOut('fast').remove();
 }
 
-// For mobile nav initialization
-$(function () {
-    $(".button-collapse").sideNav();
-});
-
 
 // url parameters
 (function ($) {
@@ -234,34 +229,77 @@ $(function () {
  })(jQuery);
 
 
-// logout
+
 $(function () {
+
+    // a tags click event
+    $.each($('a'), function (i, item) {
+        var $this = $(item);
+        var href = $this.attr('href');
+        // href check
+        if (href && href.length > 0) {
+            var next = false;
+            var res;
+            if (/^\/accounts\/(login|register|logout)\/\?/.test(href)) {
+                res = /^\/accounts\/(login|register|logout)\/(\?.*)$/.exec(href);
+            } else {
+                res = /^\/accounts\/(login|register|logout)\/([^\/]*)$/.exec(href);
+            }
+            if (res) {
+                var paramStr = res[2];
+                if (paramStr.indexOf('?') == 0) {
+                    var params = paramStr.slice(1, paramStr.length).split('&');
+                    var hasNext = false;
+                    $.each(params, function (i ,item) {
+                        try {
+                            if (item.split('=')[0] == 'next') {
+                                hasNext = true;
+                                return false;
+                            }
+                        } catch (e) {return true}
+                    });
+                    if (hasNext == false) {
+                        href += '&next=' + getRelativeUrl();
+                        // console.log('1. ' + href);
+                    }
+                } else {
+                    href += '?next=' + getRelativeUrl();
+                    // console.log('2. ' + href);
+                }
+                $this.attr('href', href);
+            }
+
+        }
+    });
+
+
+    // For mobile nav initialization
+    $(".button-collapse").sideNav();
+
+    // logout
     var $logout_btn = $('#nav-logout-btn');
     if ($logout_btn) {
         $logout_btn.click(function (e) {
             var $this = $(this);
-            var from_url = $.getUrlParam('from');
+            var next_url = $.getUrlParam('next');
             var href = $this.attr('href');
-            $this.unbind('click');
             e.preventDefault();
             $.ajax({
                 url: href,
-                type: 'DELETE',
+                type: 'POST',
                 success: function (callback) {
                     var obj = $.parseJSON(callback);
                     if (obj.result) {
-                        if (from_url) {
-                            window.location.href = href;
+                        if (next_url) {
+                            window.location.href = next_url;
                         } else {
-                            window.location.href = '/';
+                            window.location.reload();
                         }
                     } else {
                         Materialize.toast(obj.msg.desc, 3000);
                     }
-                },
-                complete: function () {
-                    $this.bind('click');
                 }
+
             });
         });
     }
@@ -269,6 +307,9 @@ $(function () {
 
 
 (function ($) {
+
+    /* translation exception message to Chinese
+        msgCode received from json is sent by server */
     $.parseJSONAndTrans = function (jsonObj) {
         var obj = $.parseJSON(jsonObj);
         var msgCode = obj.msg.code;
@@ -284,17 +325,3 @@ $(function () {
     };
  })(jQuery);
 
-function translateException(msgCode) {
-    /*
-     translation exception message to Chinese
-     msgCode received from json is sent by server
-     */
-    var msg = '';
-    $.each(exceptionTrans, function (k, v) {
-        if (parseInt(k) === parseInt(msgCode)) {
-            msg = v;
-            return false;
-        }
-    });
-    return msg;
-}

@@ -52,4 +52,5 @@ class CommonMiddleware(object):
                 response.context_data = {}
             regions = questions_models.Region.objects.all()
             response.context_data['regions'] = regions
+
         return response

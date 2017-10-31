@@ -25,12 +25,12 @@
             <a id="nav-avatar" href="#" title="Hello {{ user.name }}"><img src="{{ user.avatar.thumb_small }}" alt="User Avatar"></a>
             <a id="nav-username-btn" href="#"><span class="white-text name">{% ifequal user.role 'admin' %}<span class="yellow-text" title="管理员">[S]</span> {% endifequal %}{{ user.name }}</span></a>
             <a id="nav-email-btn" href="#"><span class="white-text email">{{ user.email }}</span></a>
-            <a id="nav-logout-btn" href="{% url 'accounts:logout' %}?from={{ request.path_info }}"><span class="white-text email">注销</span></a>
+            <a id="nav-logout-btn" href="{% url 'accounts:logout' %}"><span class="white-text email">注销</span></a>
             {% endwith %}
           {% else %}
-            <a href="{% url 'accounts:login_page' %}{% block nav_login_ref %}?from={{ request.path_info }}{% endblock %}">
+            <a href="{% url 'accounts:login_page' %}{% block nav_login_ref %}{% endblock %}">
               <span class="white-text name">登录</span></a>
-            <a href="{% url 'accounts:register_page' %}{% block nav_register_ref %}?from={{ request.path_info }}{% endblock %}">
+            <a href="{% url 'accounts:register_page' %}{% block nav_register_ref %}{% endblock %}">
               <span class="white-text name">注册</span></a>
           {% endif %}
       </div>
@@ -88,6 +88,6 @@
   </div>
 {% endblock %}
 {% block js %}
-  <script src="{% static 'js/questions/base.js' %}?v=1"></script>
+  <script src="{% static 'js/questions/base.js' %}?v=6"></script>
   {% block question_js %}{% endblock %}
 {% endblock %}
