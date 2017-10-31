@@ -6,7 +6,7 @@ $(function () {
     $('#login-form').submit(function (e) {
         // prevent default submit action
         e.preventDefault();
-        var from_url = $.getUrlParam('from');
+        var next_url = $.getUrlParam('next');
         var $this = $(this);
         var $submit_btn = $this.find('button[type=submit]');
         var $password = $this.find('#password');
@@ -33,16 +33,15 @@ $(function () {
             data: data,
             type: $this.attr('method'),
             success: function (callback) {
-                var obj = $.parseJSON(callback);
+                var obj = $.parseJSONAndTrans(callback)
                 if (obj.result) {
-                    if (from_url) {
-                        window.location.href = from_url;
+                    if (next_url) {
+                        window.location.href = next_url;
                     } else {
                         window.location.href = '/';
                     }
                 } else {
-                    var msg = translateException(obj.msg.code);
-                    Materialize.toast(msg || obj.msg.desc, 3000);
+                    Materialize.toast(obj.msg.desc, 3000);
                 }
             },
             complete: function () {

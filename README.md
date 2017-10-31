@@ -56,6 +56,9 @@
 * 除GET外，其余返回JSON格式，具体格式见common/constants/common.py
 
 ## 测试流程
+0. 安装依赖包
+* pip install mysqlclient
+* pip install Pillow
 1. 安装并启动MySQL服务
 2. 修改settings.py文件中“DATABASES”各项
 3. 初始化数据库，在项目根目录依次执行如下命令

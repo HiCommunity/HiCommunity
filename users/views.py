@@ -2,20 +2,21 @@
 from __future__ import unicode_literals
 
 import json
-import os
-import time
-import uuid
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, HttpResponse
 from django.db.models import Q
 from common.constants.common import RET_FORMAT
+from common.constants.messages import Privileges
+from common.utils.url import get_from_url
 from users.utils.security import request_method, login_required
-from users.models import Account, Profile
+from users.models import Account
 from users.constants.common import *
 from users.utils import validation
 from users.exception import *
 from common.utils.js_ import js_str2bool
+from django.contrib import messages
+from django.template.response import TemplateResponse
 
 from users.view_helper import generate_avatar
 
@@ -33,7 +34,7 @@ def register(request):
     email = request.POST.get('email', '').strip().lower()
     # validation
     if (not validation.validate_username(username)
-        or not validation.validate_email(email)):
+            or not validation.validate_email(email)):
         raise InvalidUsernameOrEmailFormat
     elif not validation.validate_password(password):
         raise InvalidPasswordFormat
@@ -55,8 +56,8 @@ def register(request):
         print('create user account failed: %s' % str(e))
         raise UserAccountCreateFailed
     else:
-        ret['result'] = True
-        ret['msg']['redirect_url'] = reverse('accounts:login_page')
+        messages.add_message(request, messages.SUCCESS,
+                             Privileges.PLEASE_LOGIN % username)
 
     # Try to create an avatar for user
     try:
@@ -74,13 +75,16 @@ def register(request):
     except Exception as e:
         print('update user avatar failed: %s' % str(e))
         raise UserAccountCreateFailed
+
+    ret['result'] = True
+    ret['msg']['redirect_url'] = reverse('accounts:login_page')
     return HttpResponse(json.dumps(ret))
 
 
 @request_method('GET')
 def login_page(request):
-
-    return render(request, 'users/login.html')
+    context = {'next': get_from_url(request)}
+    return TemplateResponse(request, 'users/login.html', context=context)
 
 
 @request_method('POST')
@@ -130,8 +134,8 @@ def login(request):
     return HttpResponse(json.dumps(ret))
 
 
+@request_method('POST')
 @login_required
-@request_method('DELETE')
 def logout(request, *args, **kwargs):
     """
     Note Django does not provide automatic purging of expired sessions.
