@@ -20,7 +20,7 @@ def generate_avatar(account_id):
     small_name = '%s_%dx%d.jpg' % (timestamp, small_size, small_size)
     thumb_big = os.path.join(Media.USERS_AVATAR_URL % account_id, big_name)
     thumb_small = os.path.join(Media.USERS_AVATAR_URL % account_id, small_name)
-    _path = Avatar.generate_avatar(fp=avatar_path, fn=avatar_name,
+    _path = Avatar.generate_avatar(avatar_path, avatar_name,
                                    size=avatar_size)
     Avatar.generate_thumb(_path, big_size, fn=big_name)
     Avatar.generate_thumb(_path, small_size, fn=small_name)

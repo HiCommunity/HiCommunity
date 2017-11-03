@@ -47,7 +47,7 @@ class Avatar(object):
         timestamp = str(int(time.time()))
         return '%s_%dx%d.%s' % (timestamp, size, size, 'jpg')
 
-    def generate_avatar(self, fp='', fn='', size=256, min_border=10):
+    def generate_avatar(self, fp, fn, size=256, min_border=10):
         """
         Generate a random square avatar
         :param size: width / height (px)
@@ -79,7 +79,7 @@ class Avatar(object):
             mode = self._random_mode
             for i in mode:
                 for x in range((border+1) + (i-1)*chunk, (border+1) + i*chunk):
-                    for y in range((border+1) + chunk*h, (border+1) + chunk*(h+1)):
+                    for y in range((border + 1) + chunk * h, (border + 1) + chunk * (h + 1)):
                         draw.point((x, y), fill=color)
 
         new_avatar = os.path.join(fp, fn)
@@ -88,16 +88,17 @@ class Avatar(object):
         new_image.save(new_avatar, 'jpeg')
         return new_avatar
 
-    def generate_thumb(self, avatar, size, fn=''):
+    @staticmethod
+    def generate_thumb(origin, size, fn):
         """
         Generate avatar thumbs from avatar, like 100x100, 40x40
-        :param avatar: avatar file path
+        :param origin: original avatar file path
         :param size: size of avatar thumbs to be generated
         :param fn: new filename
         """
         assert isinstance(size, int), 'Integers are expected'
-        img = Image.open(avatar)
-        path = os.path.dirname(avatar)
+        img = Image.open(origin)
+        path = os.path.dirname(origin)
 
         new_img = img.resize((size, size), Image.ANTIALIAS)
         thumb_path = os.path.join(path, fn)
@@ -107,5 +108,7 @@ class Avatar(object):
 
 if __name__ == '__main__':
     a = Avatar()
-    _ = a.generate_avatar()
-    a.generate_thumb(_, 40)
+    WORKING_DIR = r'D:\test'
+    avatar = a.generate_avatar(fp=WORKING_DIR, fn='avatar.jpg', size=256)
+    a.generate_thumb(avatar, size=100, fn='avatar_thumb_100x100.jpg')
+    a.generate_thumb(avatar, size=40, fn='avatar_thumb_40x40.jpg')
