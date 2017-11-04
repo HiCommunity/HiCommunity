@@ -12,12 +12,12 @@ from common.constants.common import RET_FORMAT
 from common.exception import EmptyContent
 from common.utils.string_ import str2int
 from questions import models as questions_models
-from questions.models import Question, Answer
+from questions.models import Question, Answer, Comment
 from questions import views_helper
 from questions.exception import *
 from users.models import Account
-from users.constants.common import SESSION_LOGIN_USER
 from users.utils.security import request_method, login_required, role_restrict
+from users.view_helper import get_login_session
 
 
 @request_method('GET')
@@ -64,7 +64,9 @@ def question_detail_page(request, *args, **kwargs):
     except Question.DoesNotExist:
         raise Http404
 
-    context = {'question_detail': question_object}
+    context = {'question_detail': question_object,
+               'region': kwargs.get('region'),
+               'board': kwargs.get('board')}
 
     return TemplateResponse(request, 'questions/detail.html', context=context)
 
@@ -77,7 +79,7 @@ def new_question(request, region, board, *args, **kwargs):
     content = request.POST.get('content')
     if not all((title, content)):
         raise EmptyContent
-    uid = kwargs[SESSION_LOGIN_USER]['id']
+    uid = get_login_session(request)['id']
     try:
         Question.objects.create(
             title=title,
@@ -99,22 +101,38 @@ def new_answer(request, region, board, qid, **kwargs):
     content = request.POST.get('content')
     if not content:
         raise EmptyContent
-    uid = kwargs[SESSION_LOGIN_USER]['id']
+    uid = get_login_session(request)['id']
     try:
         Question.objects.filter(id=qid).update(answer_count=F('answer_count') + 1,
                                                update_at=datetime.utcnow())
         Answer.objects.create(question_id=qid, content=content, owner_id=uid)
-        ret['result'] = True
     except Exception as e:
         print(str(e))
         raise CreateAnswerFailed
+    else:
+        ret['result'] = True
     return HttpResponse(json.dumps(ret))
 
 
 @login_required
 @request_method('POST')
 def new_comment(request, region, board, qid, **kwargs):
-    pass
+    ret = RET_FORMAT
+    content = request.POST.get('content')
+    aid = request.POST.get('aid')
+    if not content:
+        raise EmptyContent
+    uid = get_login_session(request)['id']
+    try:
+        Comment.objects.create(answer_id=aid,
+                               content=content,
+                               owner_id=uid)
+    except Exception as e:
+        print(str(e))
+        raise CreateCommentFailed
+    else:
+        ret['result'] = True
+    return HttpResponse(json.dumps(ret))
 
 
 @login_required

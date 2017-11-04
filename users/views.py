@@ -3,22 +3,23 @@ from __future__ import unicode_literals
 
 import json
 
-from django.core.urlresolvers import reverse
-from django.shortcuts import render, HttpResponse
-from django.db.models import Q
-from common.constants.common import RET_FORMAT
-from common.constants.messages import Privileges
-from common.utils.url import get_from_url
-from users.utils.security import request_method, login_required
-from users.models import Account
-from users.constants.common import *
-from users.utils import validation
-from users.exception import *
-from common.utils.js_ import js_str2bool
 from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.db.models import Max
+from django.db.models import Q
+from django.shortcuts import render, HttpResponse
 from django.template.response import TemplateResponse
 
-from users.view_helper import generate_avatar
+from common.constants.common import RET_FORMAT
+from common.constants.messages import Privileges
+from common.utils.js_ import js_str2bool
+from common.utils.url import get_from_url
+
+from users.exception import *
+from users.models import Account
+from users.utils import validation
+from users.utils.security import request_method, login_required
+from users.view_helper import *
 
 
 @request_method('GET')
@@ -48,33 +49,33 @@ def register(request):
     # unique user uuid
     # _uuid = uuid.uuid5(uuid.NAMESPACE_OID, email)
 
+    _id = Account.objects.values('id').aggregate(Max('id'))
+    if _id:
+        new_id = _id['id__max'] + 1
+    else:
+        new_id = 1
+
+    # Try to create an avatar for user
     try:
-        account_object = Account.objects.create(password=password,
-                                                username=username,
-                                                email=email)
+        avatar, thumb_big, thumb_small = generate_avatar(new_id)
+    except Exception as e:
+        print('generate avatar failed: %s' % str(e))
+        raise UserAccountCreateFailed
+
+    # create account
+    try:
+        Account.objects.create(password=password,
+                               username=username,
+                               email=email,
+                               avatar=avatar,
+                               avatar_thumb_big=thumb_big,
+                               avatar_thumb_small=thumb_small)
     except Exception as e:
         print('create user account failed: %s' % str(e))
         raise UserAccountCreateFailed
     else:
         messages.add_message(request, messages.SUCCESS,
                              Privileges.PLEASE_LOGIN % username)
-
-    # Try to create an avatar for user
-    try:
-        avatar, thumb_big, thumb_small = generate_avatar(account_object.id)
-    except Exception as e:
-        print('generate avatar failed: %s' % str(e))
-        raise UserAccountCreateFailed
-
-    # Update avatar
-    try:
-        Account.objects.filter(id=account_object.id).update(
-            avatar=avatar,
-            avatar_thumb_big=thumb_big,
-            avatar_thumb_small=thumb_small)
-    except Exception as e:
-        print('update user avatar failed: %s' % str(e))
-        raise UserAccountCreateFailed
 
     ret['result'] = True
     ret['msg']['redirect_url'] = reverse('accounts:login_page')
@@ -90,8 +91,8 @@ def login_page(request):
 @request_method('POST')
 def login(request):
     # handle login user
-    user_id = request.session.get(SESSION_LOGIN_USER)
-    if user_id:
+    user_is_login = get_login_session(request)
+    if user_is_login:
         raise UserAlreadyLogin
 
     ret = RET_FORMAT
@@ -115,17 +116,7 @@ def login(request):
                 # login successfully
                 if not checked:
                     request.session.set_expiry(0)
-                request.session[SESSION_LOGIN_USER] = {
-                    'id': account_object.id,
-                    'name': account_object.username,
-                    'email': account_object.email,
-                    'role': account_object.role,
-                    'avatar': {
-                        'origin': str(account_object.avatar),
-                        'thumb_big': str(account_object.avatar_thumb_big),
-                        'thumb_small': str(account_object.avatar_thumb_small)
-                    }
-                }
+                set_login_session(request, account_object)
                 ret['result'] = True
             else:
                 raise InvalidPassword
@@ -143,9 +134,6 @@ def logout(request, *args, **kwargs):
     on a regular basis, for example as a daily cron job.
     """
     ret = RET_FORMAT
-    try:
-        del request.session[SESSION_LOGIN_USER]
-    except KeyError:
-        pass
+    del_login_session(request)
     ret['result'] = True
     return HttpResponse(json.dumps(ret))

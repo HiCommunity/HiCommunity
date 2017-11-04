@@ -325,3 +325,17 @@ $(function () {
     };
  })(jQuery);
 
+function translateException(msgCode) {
+    /*
+     translation exception message to Chinese
+     msgCode received from json is sent by server
+     */
+    var msg = '';
+    $.each(exceptionTrans, function (k, v) {
+        if (parseInt(k) === parseInt(msgCode)) {
+            msg = v;
+            return false;
+        }
+    });
+    return msg;
+}

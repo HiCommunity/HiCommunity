@@ -2,6 +2,11 @@
 from HiCommunity.settings import MEDIA_ROOT, MEDIA_URL
 import os
 
+__all__ = [
+    'SESSION_LOGIN_USER',
+    'Media'
+]
+
 # Session
 SESSION_LOGIN_USER = 'login_user'
 
