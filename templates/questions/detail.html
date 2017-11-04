@@ -45,7 +45,7 @@
                       </li>
                     {% endfor %}
                   </ul>
-                  <div><a style="cursor: pointer" class="grey-text show-more-comments">显示剩余{{ comments|length|add:-5 }}条</a></div>
+                  {% if comments|length > 5 %}<div><a style="cursor: pointer" class="grey-text show-more-comments">显示剩余{{ comments|length|add:-5 }}条</a></div>{% endif %}
                 {% endif %}
               {% endwith %}
               </div>
