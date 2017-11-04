@@ -74,12 +74,8 @@
       <div class="nav-wrapper">
         <div class="col s12">
           <a href="{% url 'questions:index' %}" class="breadcrumb">首页</a>
-          <a href="{% url 'questions:list' current_region.address current_region.address %}"
-             class="breadcrumb">{{ current_region.name }}</a>
-          <a href="{% if current_region.no_board %}
-            {% url 'questions:list_no_board' current_region.address %}
-            {% else %}{% url 'questions:list' current_region.address current_board.address %}
-            {% endif %}" class="breadcrumb">{{ current_board.name }}</a>
+          <a class="breadcrumb">{{ current_region.name }}</a>
+          <a href="{% url 'questions:list' current_region.address current_board.address %}" class="breadcrumb">{{ current_board.name }}</a>
         </div>
       </div>
     </nav>
