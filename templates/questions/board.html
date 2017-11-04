@@ -6,6 +6,7 @@
 {% block question_main_content %}
     <div class="row">
       <div class="col l9 s12">
+        {% if questions|length > 0 %}
         <ul class="collection">
           {% for question in questions %}
             <li class="collection-item"><a href="{% url 'questions:detail_page' current_region.address current_board.address question.id %}">{{ question.title }}</a>
@@ -38,6 +39,9 @@
               <a><i class="material-icons">chevron_right</i></a></li>
           {% endif %}
         </ul>
+        {% else %}
+        <div>还没有任何问题</div>
+        {% endif %}
         <div class="divider" style="margin: 30px 0;"></div>
         <div>提问</div>
 

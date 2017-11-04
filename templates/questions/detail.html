@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block question_nav_title %}{{ question_detail.title }}{% endblock %}
 {% block question_css %}
-  <link href="{% static 'css/questions/detail.css' %}?v=1" rel="stylesheet">
+  <link href="{% static 'css/questions/detail.css' %}?v=2" rel="stylesheet">
 {% endblock %}
 {% block content %}
   <div class="container">
@@ -24,6 +24,7 @@
         <div>{% if answers|length > 0 %}{{ answers|length }} 个回答{% else %}暂无回答{% endif %}</div>
         {% for answer in answers %}
           <div id="answer-{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
+            <div class="right-align grey-text" style="margin-bottom: 20px">{{ forloop.counter }}#</div>
             <div>{{ answer.content|safe }}</div>
             <div class="right-align">
               <span class="grey-text">{{ answer.owner.username }} {{ answer.create_at }}</span>
