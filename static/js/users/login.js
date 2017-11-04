@@ -33,7 +33,7 @@ $(function () {
             data: data,
             type: $this.attr('method'),
             success: function (callback) {
-                var obj = $.parseJSONAndTrans(callback)
+                var obj = $.parseJSON(callback);
                 if (obj.result) {
                     if (next_url) {
                         window.location.href = next_url;
@@ -41,7 +41,7 @@ $(function () {
                         window.location.href = '/';
                     }
                 } else {
-                    Materialize.toast(obj.msg.desc, 3000);
+                    Materialize.toast(translateException(obj.msg.code), 3000);
                 }
             },
             complete: function () {

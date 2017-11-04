@@ -9,6 +9,7 @@
     {% with answers=question_detail.answer_of_question.all %}
     <div class="row">
       <div class="col l9 m10 s12">
+        <input type="hidden" id="csrf-token" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
         <div id="question" class="section scrollspy card-panel grey lighten-5 z-depth-1">
           <div>
             {{ question_detail.content }}
@@ -22,15 +23,35 @@
         <div class="divider" style="margin: 30px 0;"></div>
         <div>{% if answers|length > 0 %}{{ answers|length }} 个回答{% else %}暂无回答{% endif %}</div>
         {% for answer in answers %}
-          <div id="{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
+          <div id="answer-{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
             <div>{{ answer.content|safe }}</div>
             <div class="right-align">
               <span class="grey-text">{{ answer.owner.username }} {{ answer.create_at }}</span>
             </div>
+            <div class="divider" style="margin: 30px 0;"></div>
+            <div class="row comment-list-wrapper">
+              <div class="col s12 comment-list">
+              {% with comments=answer.comment_of_answer.all %}
+                {% if comments|length > 0 %}
+                  <ul class="collection">
+                    {% for comment in answer.comment_of_answer.all %}
+                      <li id="comment-{{ comment.id }}" class="collection-item {% if forloop.counter > 5 %}hide{% endif %}">
+                        {{ comment.content }}
+                        <div class="right">
+                          <a href="#">{{ comment.owner.username }}</a>
+                          <span class="grey-text">{{ comment.create_at }}</span>
+                        </div>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <div><a style="cursor: pointer" class="grey-text show-more-comments">显示剩余{{ comments|length|add:-5 }}条</a></div>
+                {% endif %}
+              {% endwith %}
+              </div>
+            </div>
             <div class="right-align">
               <i class="material-icons grey-text show-comment">expand_more</i>
             </div>
-
           </div>
         {% endfor %}
 
@@ -41,7 +62,7 @@
       <div class="col hide-on-small-only m2 l3 pin-top">
         <ul class="section table-of-contents pinned">
           {% for answer in answers %}
-          <li><a class="truncate" href="#answer{{ answer.id }}">{{ forloop.counter }}. {{ answer.content|truncatechars:'20' }}</a></li>
+          <li><a class="truncate" href="#answer-{{ answer.id }}">{{ forloop.counter }}. {{ answer.content|truncatechars:'20' }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -50,8 +71,7 @@
     {% endwith %}
 
     <div class="row">
-
-        <form id="new-answer-form" class="col l9 m10 s12" method="post" action="new_answer/">
+        <form id="new-answer-form" class="col l9 m10 s12" method="post" action="{% url 'questions:new_answer' region board question_detail.id %}">
           {% csrf_token %}
           <div class="row">
             <div class="input-field col s12">
@@ -70,5 +90,5 @@
   </div>
 {% endblock %}
 {% block question_js %}
-  <script src="{% static 'js/questions/detail.js' %}?v=0"></script>
+  <script src="{% static 'js/questions/detail.js' %}?v=5"></script>
 {% endblock %}

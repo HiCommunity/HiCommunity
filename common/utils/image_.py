@@ -74,12 +74,14 @@ class Avatar(object):
 
         # fill new image with random color
         color = self._random_color
+        b = border
+        c = chunk
         for h in range(5):
             # get random fill mode for per chunk of columns
             mode = self._random_mode
             for i in mode:
-                for x in range((border+1) + (i-1)*chunk, (border+1) + i*chunk):
-                    for y in range((border + 1) + chunk * h, (border + 1) + chunk * (h + 1)):
+                for x in range((b+1) + (i-1)*c, (b+1) + i*c):
+                    for y in range((b+1) + c*h, (b+1) + c*(h+1)):
                         draw.point((x, y), fill=color)
 
         new_avatar = os.path.join(fp, fn)
