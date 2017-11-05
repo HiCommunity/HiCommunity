@@ -238,27 +238,26 @@ $(function () {
         var href = $this.attr('href');
         // href check
         if (href && href.length > 0) {
-            var next = false;
             var res;
-            if (/^\/accounts\/(login|register|logout)\/\?/.test(href)) {
-                res = /^\/accounts\/(login|register|logout)\/(\?.*)$/.exec(href);
+            if (/^\/users\/accounts\/(login|register|logout)\/\?/.test(href)) {
+                res = /^\/users\/accounts\/(login|register|logout)\/(\?.*)$/.exec(href);
             } else {
-                res = /^\/accounts\/(login|register|logout)\/([^\/]*)$/.exec(href);
+                res = /^\/users\/accounts\/(login|register|logout)\/([^\/]*)$/.exec(href);
             }
             if (res) {
                 var paramStr = res[2];
-                if (paramStr.indexOf('?') == 0) {
+                if (paramStr.indexOf('?') === 0) {
                     var params = paramStr.slice(1, paramStr.length).split('&');
                     var hasNext = false;
                     $.each(params, function (i ,item) {
                         try {
-                            if (item.split('=')[0] == 'next') {
+                            if (item.split('=')[0] === 'next') {
                                 hasNext = true;
                                 return false;
                             }
                         } catch (e) {return true}
                     });
-                    if (hasNext == false) {
+                    if (hasNext === false) {
                         href += '&next=' + getRelativeUrl();
                         // console.log('1. ' + href);
                     }
@@ -271,7 +270,6 @@ $(function () {
 
         }
     });
-
 
     // For mobile nav initialization
     $(".button-collapse").sideNav();

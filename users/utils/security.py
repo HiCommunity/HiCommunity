@@ -31,7 +31,7 @@ def login_required(func):
         else:
             if request.method == 'GET':
                 messages.add_message(request, messages.WARNING, Privileges.NEED_LOGIN_FIRST)
-                return HttpResponseRedirect(reverse('accounts:login_page'))
+                return HttpResponseRedirect(reverse('users:accounts:login_page'))
             else:
                 raise LoginRequired
     return required_inner
@@ -75,7 +75,8 @@ def role_restrict(role):
                     if 'admin' in expect_roles:
                         messages.add_message(request, messages.ERROR,
                                              Privileges.NOT_ALLOWED_TO_ACCESS)
-                        return HttpResponseRedirect(reverse('accounts:login_page'))
+                        return HttpResponseRedirect(
+                            reverse('users:accounts:login_page'))
                 else:
                     raise UserRoleVerificationFailed
 

@@ -24,8 +24,7 @@ urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^hiadmin/', include('hiadmin.urls.urls', namespace='hiadmin')),
-    url(r'^accounts/', include('users.urls.account_urls', namespace='accounts')),
-    # url(r'^user/', include('users.urls.urls', namespace='user')),
+    url(r'^users/', include('users.urls.urls', namespace='users')),
     url(r'^questions/', include('questions.urls', namespace='questions')),
 ]
 
