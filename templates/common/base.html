@@ -20,7 +20,7 @@
     {% if messages %}
     <ul class="messages">
       {% for message in messages %}
-      <li class="message white-text center-align {% if message.tags %}message-{{ message.tags }}{% endif %}">{{ message }}</li>
+      <li class="message center-align {% if message.tags %}message-{{ message.tags }}{% endif %}">{{ message }}</li>
       {% endfor %}
     </ul>
     {% endif %}

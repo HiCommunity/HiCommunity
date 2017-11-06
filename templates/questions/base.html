@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block question_nav %}
-  <nav class="top-nav">
+  <nav class="top-nav" style="height: 61px;">
     <div class="container">
       <div class="nav-wrapper"><a class="page-title truncate">{% block question_nav_title %}{% endblock %}</a></div>
     </div>
@@ -18,7 +18,7 @@
   <ul id="nav-side" class="side-nav fixed">
     <li>
       <div class="user-view">
-        <div class="background"><img src="http://materializecss.com/images/office.jpg"></div>
+        <div class="background"><img style="background-color: deepskyblue" src="{% static 'images/common/background/pattern.svg' %}"></div>
 
           {% if is_login %}
             {% with user=request.session.login_user %}

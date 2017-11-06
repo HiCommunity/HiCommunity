@@ -78,7 +78,7 @@ def register(request):
                              Privileges.PLEASE_LOGIN % username)
 
     ret['result'] = True
-    ret['msg']['redirect_url'] = reverse('users:accounts:login_page')
+    ret['message']['redirect_url'] = reverse('users:accounts:login_page')
     return HttpResponse(json.dumps(ret))
 
 

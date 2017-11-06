@@ -289,7 +289,7 @@ $(function () {
                             window.location.reload();
                         }
                     } else {
-                        Materialize.toast(obj.msg.desc, 3000);
+                        Materialize.toast(obj.message.desc, 3000);
                     }
                 }
 
