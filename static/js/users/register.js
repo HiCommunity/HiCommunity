@@ -38,7 +38,7 @@ $(function () {
                 if (obj.result) {
                     window.location.href = obj.msg.redirect_url;
                 } else {
-                    var msg = translateException(obj.msg.code);
+                    var msg = translateException(obj.message);
                     Materialize.toast(msg, 3000);
                 }
             },

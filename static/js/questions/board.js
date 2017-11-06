@@ -31,8 +31,8 @@ $(function () {
                 if (obj.result) {
                     window.location.reload();
                 } else {
-                    var msg = translateException(obj.msg.code);
-                    Materialize.toast(msg || obj.msg.desc, 3000);
+                    var msg = translateException(obj.message);
+                    Materialize.toast(msg, 3000);
                 }
             },
             complete: function () {

@@ -198,8 +198,6 @@ function addLoadingCover(obj) {
 function removeLoadingCover(obj) {
     var _obj = obj ? obj : 'body';
     var $parent_elem = getJQueryObject(_obj);
-    console.log($parent_elem);
-    console.log($parent_elem.children('.loading-cover'));
     $parent_elem.children('.loading-cover').fadeOut('fast').remove();
 }
 
@@ -271,9 +269,6 @@ $(function () {
         }
     });
 
-    // For mobile nav initialization
-    $(".button-collapse").sideNav();
-
     // logout
     var $logout_btn = $('#nav-logout-btn');
     if ($logout_btn) {
@@ -303,37 +298,19 @@ $(function () {
     }
 });
 
-
-(function ($) {
-
-    /* translation exception message to Chinese
-        msgCode received from json is sent by server */
-    $.parseJSONAndTrans = function (jsonObj) {
-        var obj = $.parseJSON(jsonObj);
-        var msgCode = obj.msg.code;
-        if (msgCode) {
-            $.each(exceptionTrans, function (k, v) {
-                if (parseInt(k) === parseInt(msgCode)) {
-                    obj.msg.desc = v;
-                    return false;
-                }
-            });
-        }
-        return obj;
-    };
- })(jQuery);
-
-function translateException(msgCode) {
+function translateException(msgObj) {
     /*
      translation exception message to Chinese
      msgCode received from json is sent by server
      */
     var msg = '';
     $.each(exceptionTrans, function (k, v) {
-        if (parseInt(k) === parseInt(msgCode)) {
+        if (parseInt(k) === parseInt(msgObj.code)) {
             msg = v;
             return false;
         }
     });
+    console.log(msgObj);
+    msg = msg ? msg : msgObj.desc;
     return msg;
 }

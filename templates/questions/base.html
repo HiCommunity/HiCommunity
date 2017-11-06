@@ -1,8 +1,8 @@
 {% extends 'common/base.html' %}
 {% load staticfiles %}
-{% block materialize_css %}<link href="{% static 'css/common/ghpages-materialize.css' %}" rel="stylesheet" type="text/css" media="screen,projection">{% endblock %}
+{% block materialize_css %}<link href="{% static 'css/common/ghpages-materialize.css' %}?v=0" rel="stylesheet" type="text/css" media="screen,projection">{% endblock %}
 {% block css %}
-  <link href="{% static 'css/questions/base.css' %}?v=2" rel="stylesheet">
+  <link href="{% static 'css/questions/base.css' %}?v=3" rel="stylesheet">
   {% block question_css %}{% endblock %}
 {% endblock %}
 
@@ -13,7 +13,7 @@
     </div>
   </nav>
   <div class="container">
-    <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
+    <a href="#" data-activates="nav-side" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
   </div>
   <ul id="nav-side" class="side-nav fixed">
     <li>
@@ -45,15 +45,15 @@
 
     <li class="no-padding">
       <ul class="collapsible collapsible-accordion">
-        {% for region_item in regions %}
-          {% with boards=region_item.board_of_region.all %}
+        {% for menu in side_nav_menus %}
+          {% with region=menu.region boards=menu.boards %}
             {% if boards|length > 0 %}
             <li class="bold">
-              <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
+              <a class="collapsible-header waves-effect waves-teal">{{ region.name }}</a>
               <div class="collapsible-body">
                 <ul>
                   {% for board_item in boards %}
-                  <li><a href="{% url 'questions:list' region_item.address board_item.address %}">
+                  <li><a href="{% url 'questions:list' region.address board_item.address %}">
                     {{ board_item.name }}</a></li>
                   {% endfor %}
                 </ul>
@@ -67,11 +67,11 @@
 
   </ul>
 {% endblock %}
+
 {% block content %}
-  <div class="container">
-    {% block question_breadcrumb %}
-    <nav style="margin: 20px 0;">
-      <div class="nav-wrapper">
+  {% block question_breadcrumb %}
+    <nav style="margin-bottom: 20px" class="row">
+      <div class="nav-wrapper container">
         <div class="col s12">
           <a href="{% url 'questions:index' %}" class="breadcrumb">首页</a>
           <a class="breadcrumb">{{ current_region.name }}</a>
@@ -79,11 +79,15 @@
         </div>
       </div>
     </nav>
-    {% endblock %}
+  {% endblock %}
+  <div class="container">
+    {% block question_title %}{% endblock %}
     {% block question_main_content %}{% endblock %}
   </div>
+
 {% endblock %}
+
 {% block js %}
-  <script src="{% static 'js/questions/base.js' %}?v=6"></script>
+  <script src="{% static 'js/questions/base.js' %}?v=7"></script>
   {% block question_js %}{% endblock %}
 {% endblock %}

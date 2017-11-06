@@ -8,7 +8,7 @@ $(function () {
    var $accordionItems = $navSide.find('div.collapsible-body');
    $.each($accordionItems.find('a'), function (i, item) {
        var $item = getJQueryObject(item);
-       if (getRelativeUrl().indexOf($item.attr('href')) == 0) {
+       if (getRelativeUrl().indexOf($item.attr('href')) === 0) {
            $item.parent().parent().parent().slideDown(
                { duration: 350, easing: "easeOutQuart", queue: false, complete: function () {
                    $(this).css('height', '');}});
@@ -18,5 +18,8 @@ $(function () {
            $item.parent().parent().parent().parent().addClass('active');
        }
    });
+
+    // For mobile nav initialization
+    $(".button-collapse").sideNav();
 
 });

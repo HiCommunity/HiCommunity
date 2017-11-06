@@ -41,7 +41,8 @@ $(function () {
                         window.location.href = '/';
                     }
                 } else {
-                    Materialize.toast(translateException(obj.msg.code), 3000);
+                    var msg = translateException(obj.message)
+                    Materialize.toast(msg, 3000);
                 }
             },
             complete: function () {
