@@ -52,8 +52,8 @@ def question_list_page(request, region, board):
     # common/middlewares.py for all templates with a
     # question-started URL.
     # add current region and board to context
-    _ = views_helper.region_and_board_context(region, board)
-    context.update(_)
+    # _ = views_helper.region_and_board_context(region, board)
+    # context.update(_)
     return TemplateResponse(request, 'questions/board.html', context=context)
 
 

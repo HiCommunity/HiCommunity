@@ -1,36 +1,36 @@
 {% extends 'common/base.html' %}
 {% load staticfiles %}
-{% block materialize_css %}<link href="{% static 'css/common/ghpages-materialize.css' %}" rel="stylesheet" type="text/css" media="screen,projection">{% endblock %}
+{% block materialize_css %}<link href="{% static 'css/common/ghpages-materialize.css' %}?v=0" rel="stylesheet" type="text/css" media="screen,projection">{% endblock %}
 {% block css %}
-  <link href="{% static 'css/questions/base.css' %}?v=2" rel="stylesheet">
+  <link href="{% static 'css/questions/base.css' %}?v=3" rel="stylesheet">
   {% block question_css %}{% endblock %}
 {% endblock %}
 
 {% block question_nav %}
-  <nav class="top-nav">
+  <nav class="top-nav" style="height: 61px;">
     <div class="container">
       <div class="nav-wrapper"><a class="page-title truncate">{% block question_nav_title %}{% endblock %}</a></div>
     </div>
   </nav>
   <div class="container">
-    <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
+    <a href="#" data-activates="nav-side" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
   </div>
   <ul id="nav-side" class="side-nav fixed">
     <li>
       <div class="user-view">
-        <div class="background"><img src="http://materializecss.com/images/office.jpg"></div>
+        <div class="background"><img style="background-color: deepskyblue" src="{% static 'images/common/background/pattern.svg' %}"></div>
 
           {% if is_login %}
             {% with user=request.session.login_user %}
             <a id="nav-avatar" href="#" title="Hello {{ user.name }}"><img src="{{ user.avatar.thumb_small }}" alt="User Avatar"></a>
             <a id="nav-username-btn" href="#"><span class="white-text name">{% ifequal user.role 'admin' %}<span class="yellow-text" title="管理员">[S]</span> {% endifequal %}{{ user.name }}</span></a>
             <a id="nav-email-btn" href="#"><span class="white-text email">{{ user.email }}</span></a>
-            <a id="nav-logout-btn" href="{% url 'accounts:logout' %}"><span class="white-text email">注销</span></a>
+            <a id="nav-logout-btn" href="{% url 'users:accounts:logout' %}"><span class="white-text email">注销</span></a>
             {% endwith %}
           {% else %}
-            <a href="{% url 'accounts:login_page' %}{% block nav_login_ref %}{% endblock %}">
+            <a href="{% url 'users:accounts:login_page' %}{% block nav_login_ref %}{% endblock %}">
               <span class="white-text name">登录</span></a>
-            <a href="{% url 'accounts:register_page' %}{% block nav_register_ref %}{% endblock %}">
+            <a href="{% url 'users:accounts:register_page' %}{% block nav_register_ref %}{% endblock %}">
               <span class="white-text name">注册</span></a>
           {% endif %}
       </div>
@@ -45,15 +45,15 @@
 
     <li class="no-padding">
       <ul class="collapsible collapsible-accordion">
-        {% for region_item in regions %}
-          {% with boards=region_item.board_of_region.all %}
+        {% for menu in side_nav_menus %}
+          {% with region=menu.region boards=menu.boards %}
             {% if boards|length > 0 %}
             <li class="bold">
-              <a class="collapsible-header waves-effect waves-teal">{{ region_item.name }}</a>
+              <a class="collapsible-header waves-effect waves-teal">{{ region.name }}</a>
               <div class="collapsible-body">
                 <ul>
                   {% for board_item in boards %}
-                  <li><a href="{% url 'questions:list' region_item.address board_item.address %}">
+                  <li><a href="{% url 'questions:list' region.address board_item.address %}">
                     {{ board_item.name }}</a></li>
                   {% endfor %}
                 </ul>
@@ -67,11 +67,11 @@
 
   </ul>
 {% endblock %}
+
 {% block content %}
-  <div class="container">
-    {% block question_breadcrumb %}
-    <nav style="margin: 20px 0;">
-      <div class="nav-wrapper">
+  {% block question_breadcrumb %}
+    <nav style="margin-bottom: 20px" class="row">
+      <div class="nav-wrapper container">
         <div class="col s12">
           <a href="{% url 'questions:index' %}" class="breadcrumb">首页</a>
           <a class="breadcrumb">{{ current_region.name }}</a>
@@ -79,11 +79,15 @@
         </div>
       </div>
     </nav>
-    {% endblock %}
+  {% endblock %}
+  <div class="container">
+    {% block question_title %}{% endblock %}
     {% block question_main_content %}{% endblock %}
   </div>
+
 {% endblock %}
+
 {% block js %}
-  <script src="{% static 'js/questions/base.js' %}?v=6"></script>
+  <script src="{% static 'js/questions/base.js' %}?v=7"></script>
   {% block question_js %}{% endblock %}
 {% endblock %}

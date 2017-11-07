@@ -1,3 +1,6 @@
 # coding=utf-8
 
-RET_FORMAT = {'result': False, 'msg': {}}
+RET_FORMAT = {'result': False,
+              'message': {},
+              'data': {}
+              }

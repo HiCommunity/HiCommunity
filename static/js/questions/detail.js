@@ -35,7 +35,8 @@ function bindSubmitComment(section) {
                 if (obj.result) {
                     window.location.reload();
                 } else {
-                    Materialize.toast(translateException(obj.msg.code), 3000);
+                    var msg = translateException(obj.message);
+                    Materialize.toast(msg, 3000);
                 }
             },
             complete: function () {
@@ -71,11 +72,12 @@ $(function () {
             },
             success: function (callback) {
                 var obj = $.parseJSON(callback);
-                console.log(obj);
                 if (obj.result) {
                     window.location.reload();
                 } else {
-                    Materialize.toast(translateException(obj.msg.code), 3000);
+                    console.log(obj.message);
+                    var msg = translateException(obj.message);
+                    Materialize.toast(msg, 3000);
                 }
             },
             complete: function () {

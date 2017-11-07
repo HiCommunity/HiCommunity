@@ -36,9 +36,9 @@ $(function () {
             success: function (callback) {
                 var obj = $.parseJSON(callback);
                 if (obj.result) {
-                    window.location.href = obj.msg.redirect_url;
+                    window.location.href = obj.message.redirect_url;
                 } else {
-                    var msg = translateException(obj.msg.code);
+                    var msg = translateException(obj.message);
                     Materialize.toast(msg, 3000);
                 }
             },

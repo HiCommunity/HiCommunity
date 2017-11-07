@@ -1,95 +1,103 @@
 {% extends 'questions/base.html' %}
 {% load staticfiles %}
-{% block question_nav_title %}{{ question_detail.title }}{% endblock %}
 {% block question_css %}
   <link href="{% static 'css/questions/detail.css' %}?v=2" rel="stylesheet">
 {% endblock %}
-{% block content %}
-  <div class="container">
-    {% with answers=question_detail.answer_of_question.all %}
-    <div class="row">
-      <div class="col l9 m10 s12">
-        <input type="hidden" id="csrf-token" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        <div id="question" class="section scrollspy card-panel grey lighten-5 z-depth-1">
-          <div>
-            {{ question_detail.content }}
-          </div>
-          <div class="right-align">
-            <span class="grey-text">{{ question_detail.owner.username }} {{ question_detail.create_at }}</span>
-          </div>
 
+{% block question_title %}
+  <div class="row">
+    <div class="col s12">
+      <h1><a class="question-link truncate">{{ question_detail.title }}</a></h1>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block question_main_content %}
+
+  {% with answers=question_detail.answer_of_question.all %}
+  <div class="row">
+    <div class="col l9 m10 s12">
+      <input type="hidden" id="csrf-token" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+      <div id="question" class="section scrollspy card-panel grey lighten-5 z-depth-1">
+        <div>
+          {{ question_detail.content }}
+        </div>
+        <div class="right-align">
+          <span class="grey-text">{{ question_detail.owner.username }} {{ question_detail.create_at }}</span>
         </div>
 
-        <div class="divider" style="margin: 30px 0;"></div>
-        <div>{% if answers|length > 0 %}{{ answers|length }} 个回答{% else %}暂无回答{% endif %}</div>
-        {% for answer in answers %}
-          <div id="answer-{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
-            <div class="right-align grey-text" style="margin-bottom: 20px">{{ forloop.counter }}#</div>
-            <div>{{ answer.content|safe }}</div>
-            <div class="right-align">
-              <span class="grey-text">{{ answer.owner.username }} {{ answer.create_at }}</span>
-            </div>
-            <div class="divider" style="margin: 30px 0;"></div>
-            <div class="row comment-list-wrapper">
-              <div class="col s12 comment-list">
-              {% with comments=answer.comment_of_answer.all %}
-                {% if comments|length > 0 %}
-                  <ul class="collection">
-                    {% for comment in answer.comment_of_answer.all %}
-                      <li id="comment-{{ comment.id }}" class="collection-item {% if forloop.counter > 5 %}hide{% endif %}">
-                        {{ comment.content }}
-                        <div class="right">
-                          <a href="#">{{ comment.owner.username }}</a>
-                          <span class="grey-text">{{ comment.create_at }}</span>
-                        </div>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                  {% if comments|length > 5 %}<div><a style="cursor: pointer" class="grey-text show-more-comments">显示剩余{{ comments|length|add:-5 }}条</a></div>{% endif %}
-                {% endif %}
-              {% endwith %}
-              </div>
-            </div>
-            <div class="right-align">
-              <i class="material-icons grey-text show-comment">expand_more</i>
+      </div>
+
+      <div class="divider" style="margin: 30px 0;"></div>
+      <div>{% if answers|length > 0 %}{{ answers|length }} 个回答{% else %}暂无回答{% endif %}</div>
+      {% for answer in answers %}
+        <div id="answer-{{ answer.id }}" class="section scrollspy card-panel grey lighten-5 z-depth-1">
+          <div class="right-align grey-text" style="margin-bottom: 20px">{{ forloop.counter }}#</div>
+          <div>{{ answer.content|safe }}</div>
+          <div class="right-align">
+            <span class="grey-text">{{ answer.owner.username }} {{ answer.create_at }}</span>
+          </div>
+          <div class="divider" style="margin: 30px 0;"></div>
+          <div class="row comment-list-wrapper">
+            <div class="col s12 comment-list">
+            {% with comments=answer.comment_of_answer.all %}
+              {% if comments|length > 0 %}
+                <ul class="collection">
+                  {% for comment in answer.comment_of_answer.all %}
+                    <li id="comment-{{ comment.id }}" class="collection-item {% if forloop.counter > 5 %}hide{% endif %}">
+                      {{ comment.content }}
+                      <div class="right">
+                        <a href="#">{{ comment.owner.username }}</a>
+                        <span class="grey-text">{{ comment.create_at }}</span>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+                {% if comments|length > 5 %}<div><a style="cursor: pointer" class="grey-text show-more-comments">显示剩余{{ comments|length|add:-5 }}条</a></div>{% endif %}
+              {% endif %}
+            {% endwith %}
             </div>
           </div>
-        {% endfor %}
+          <div class="right-align">
+            <i class="material-icons grey-text show-comment">expand_more</i>
+          </div>
+        </div>
+      {% endfor %}
 
-        <div class="divider" style="margin: 30px 0;"></div>
-        <div>回答</div>
-      </div>
-
-      <div class="col hide-on-small-only m2 l3 pin-top">
-        <ul class="section table-of-contents pinned">
-          {% for answer in answers %}
-          <li><a class="truncate" href="#answer-{{ answer.id }}">{{ forloop.counter }}. {{ answer.content|truncatechars:'20' }}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-
+      <div class="divider" style="margin: 30px 0;"></div>
+      <div>回答</div>
     </div>
-    {% endwith %}
 
-    <div class="row">
-        <form id="new-answer-form" class="col l9 m10 s12" method="post" action="{% url 'questions:new_answer' region board question_detail.id %}">
-          {% csrf_token %}
-          <div class="row">
-            <div class="input-field col s12">
-              <i class="material-icons prefix">mode_edit</i>
-              <textarea id="new-answer-content" class="materialize-textarea" minlength="10"
-                        maxlength="65535"></textarea>
-              <label for="new-answer-content" data-error="内容至少10个字符">我的答案</label>
-            </div>
-          </div>
-            <button class="btn waves-effect waves-light" type="submit" name="action">回答
-              <i class="material-icons right">send</i>
-            </button>
-        </form>
+    <div class="col hide-on-small-only m2 l3 pin-top">
+      <ul class="section table-of-contents pinned">
+        {% for answer in answers %}
+        <li><a class="truncate" href="#answer-{{ answer.id }}">{{ forloop.counter }}. {{ answer.content|truncatechars:'20' }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
 
-     </div>
   </div>
+  {% endwith %}
+
+  <div class="row">
+      <form id="new-answer-form" class="col l9 m10 s12" method="post" action="{% url 'questions:new_answer' region board question_detail.id %}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">mode_edit</i>
+            <textarea id="new-answer-content" class="materialize-textarea" minlength="10"
+                      maxlength="65535"></textarea>
+            <label for="new-answer-content" data-error="内容至少10个字符">我的答案</label>
+          </div>
+        </div>
+          <button class="btn waves-effect waves-light" type="submit" name="action">回答
+            <i class="material-icons right">send</i>
+          </button>
+      </form>
+
+   </div>
 {% endblock %}
 {% block question_js %}
-  <script src="{% static 'js/questions/detail.js' %}?v=5"></script>
+  <script src="{% static 'js/questions/detail.js' %}?v=4"></script>
 {% endblock %}
