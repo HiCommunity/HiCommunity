@@ -1,8 +1,7 @@
 # coding=utf-8
 
 from common.exception import HiException
-from common.constants.common import RET_FORMAT
-from common.utils import format_
+from common.utils.format_ import ret_format
 from django.shortcuts import HttpResponse
 import json
 from questions import models as questions_models
@@ -21,6 +20,7 @@ class CommonMiddleware(object):
             menus.append({'region': region, 'boards': boards})
 
         self.menus = menus
+        self.ret = ret_format()
 
     def __call__(self, request):
         # Code to be executed for each request before
@@ -32,15 +32,15 @@ class CommonMiddleware(object):
 
         return response
 
-    @staticmethod
-    def process_exception(request, exception):
+    def process_exception(self, request, exception):
         if isinstance(exception, HiException):
             if request.method in ('POST', 'PUT'):
-                result = format_.ret(message={
+                result = self.ret
+                result['message'] = {
                         'code': exception.code,
                         'desc': exception.desc,
                         'level': exception.level
-                })
+                }
                 return HttpResponse(json.dumps(result))
             elif request.method == 'GET':
                 pass

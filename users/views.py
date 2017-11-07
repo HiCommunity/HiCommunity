@@ -9,8 +9,7 @@ from django.db.models import Max
 from django.db.models import Q
 from django.shortcuts import render, HttpResponse
 from django.template.response import TemplateResponse
-
-from common.utils import format_
+from common.constants.common import RET_FORMAT
 from common.constants.messages import Privileges
 from common.utils.js_ import js_str2bool
 from common.utils.url import get_from_url
@@ -30,7 +29,7 @@ def register_page(request):
 
 @request_method('POST')
 def register(request):
-    ret = format_.ret()
+    ret = RET_FORMAT
     password = request.POST.get('password')
     username = request.POST.get('username', '').strip()
     email = request.POST.get('email', '').strip().lower()
@@ -79,7 +78,7 @@ def register(request):
                              Privileges.PLEASE_LOGIN % username)
 
     ret['result'] = True
-    ret['redirect'] = reverse('users:accounts:login_page'))
+    ret['redirect'] = reverse('users:accounts:login_page')
     return HttpResponse(json.dumps(ret))
 
 
@@ -95,7 +94,6 @@ def login(request):
     user_is_login = get_login_session(request)
     if user_is_login:
         raise UserAlreadyLogin
-
     ret = RET_FORMAT
     username_or_email = request.POST.get('username_or_email')
     password = request.POST.get('password')
