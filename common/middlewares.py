@@ -2,6 +2,7 @@
 
 from common.exception import HiException
 from common.constants.common import RET_FORMAT
+from common.utils import format_
 from django.shortcuts import HttpResponse
 import json
 from questions import models as questions_models
@@ -35,12 +36,11 @@ class CommonMiddleware(object):
     def process_exception(request, exception):
         if isinstance(exception, HiException):
             if request.method in ('POST', 'PUT'):
-                result = RET_FORMAT
-                result['message'] = {
+                result = format_.ret(message={
                         'code': exception.code,
                         'desc': exception.desc,
                         'level': exception.level
-                }
+                })
                 return HttpResponse(json.dumps(result))
             elif request.method == 'GET':
                 pass
