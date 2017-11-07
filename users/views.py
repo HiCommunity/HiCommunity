@@ -19,7 +19,8 @@ from users.exception import *
 from users.models import Account
 from users.utils import validation
 from users.utils.security import request_method, login_required
-from users.view_helper import *
+from users.utils.session import *
+from users.view_helper import generate_avatar
 
 
 @request_method('GET')
@@ -125,9 +126,9 @@ def login(request):
     return HttpResponse(json.dumps(ret))
 
 
+@login_required()
 @request_method('POST')
-@login_required
-def logout(request, *args, **kwargs):
+def logout(request):
     """
     Note Django does not provide automatic purging of expired sessions.
     Therefore we should call "django-admin clearsessions" command

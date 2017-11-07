@@ -2,12 +2,12 @@
 import hashlib
 from django.core.urlresolvers import reverse
 from django.shortcuts import HttpResponseRedirect, Http404
-from users.constants.common import SESSION_LOGIN_USER
 from common.exception import HiHttp404
 from users.exception import LoginRequired, UserRoleVerificationFailed
-from common.utils.string_ import obj2list
+from common.utils.string_ import obj2iter
 from django.contrib import messages
 from common.constants.messages import Privileges
+from users.utils.session import get_login_session
 
 
 def md5_encode(string):
@@ -18,23 +18,6 @@ def md5_encode(string):
     m2 = hashlib.md5()
     m2.update(string)
     return m2.hexdigest()
-
-
-def login_required(func):
-    """
-    A decorator for views' function who needs verification of user's login
-    """
-    def required_inner(request, *args, **kwargs):
-        login_user = request.session.get(SESSION_LOGIN_USER)
-        if login_user:
-            return func(request, *args, **kwargs)
-        else:
-            if request.method == 'GET':
-                messages.add_message(request, messages.WARNING, Privileges.NEED_LOGIN_FIRST)
-                return HttpResponseRedirect(reverse('users:accounts:login_page'))
-            else:
-                raise LoginRequired
-    return required_inner
 
 
 def request_method(method):
@@ -60,25 +43,41 @@ def request_method(method):
     return wrapper
 
 
-def role_restrict(role):
+def login_required(role=None):
     """
-    Restrict request by the user's role
-    Role is a string or list/tuple
+    Restrict request by the
+    Role is a string or list/tuple.
+
     """
     def wrapper(func):
         def _restrict(request, *args, **kwargs):
-            expect_roles = obj2list(role)
-            if request.session.get(SESSION_LOGIN_USER).get('role') in expect_roles:
-                return func(request, *args, **kwargs)
-            else:
-                if request.method == 'GET':
-                    if 'admin' in expect_roles:
-                        messages.add_message(request, messages.ERROR,
-                                             Privileges.NOT_ALLOWED_TO_ACCESS)
-                        return HttpResponseRedirect(
-                            reverse('users:accounts:login_page'))
+            expect_roles = obj2iter(role)
+            login_user = get_login_session(request)
+            if login_user:
+                if role:
+                    if login_user.get('role') in expect_roles:
+                        return func(request, *args, **kwargs)
+                    else:
+                        # unsatisfied role
+                        if request.method == 'GET':
+                            messages.add_message(
+                                request, messages.ERROR,
+                                Privileges.NOT_ALLOWED_TO_ACCESS)
+                            return HttpResponseRedirect(
+                                reverse('users:accounts:login_page'))
+                        else:
+                            raise UserRoleVerificationFailed
                 else:
-                    raise UserRoleVerificationFailed
+                    return func(request, *args, **kwargs)
+            else:
+                # has not login
+                if request.method == 'GET':
+                    messages.add_message(request, messages.WARNING,
+                                         Privileges.NEED_LOGIN_FIRST)
+                    return HttpResponseRedirect(
+                        reverse('users:accounts:login_page'))
+                else:
+                    raise LoginRequired
 
         return _restrict
     return wrapper
