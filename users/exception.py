@@ -18,8 +18,8 @@ login, register, logout
 """
 
 
-class InvalidUsernameOrEmailFormat(HiException):
-    desc = 'Invalid username or email format'
+class InvalidEmailFormat(HiException):
+    desc = 'Invalid email format'
     code = 1001
 
 

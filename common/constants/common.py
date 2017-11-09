@@ -6,8 +6,14 @@ RET_FORMAT = {'result': False,
               'data': {}
 }
 
-MESSAGE_FORMAT = {
-    'id': 0,
+COMMON_MESSAGE = {
+    'code': 0,
     'desc': '',
     'level': ''
+}
+
+FORM_MESSAGE = {
+    'code': '',
+    'field': '',
+    'desc': ''
 }

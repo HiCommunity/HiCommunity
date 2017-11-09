@@ -1,5 +1,10 @@
 # coding=utf-8
 
+__all__ = [
+    'set_login_session',
+    'get_login_session',
+    'del_login_session'
+]
 
 SESSION_LOGIN_USER = 'login_user'
 

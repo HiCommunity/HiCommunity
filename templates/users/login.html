@@ -16,31 +16,56 @@
           <div class="row">
             <h4 class="center">登录</h4>
           </div>
+          {{ form.non_field_errors }}
           <div class="row">
             <div class="input-field col s12">
+              {{ form.email.errors }}
               <i class="material-icons prefix">account_circle</i>
-              <input id="username-or-email" class="validate"
-                     name="username_or_email" type="text" minlength="2"
-                     maxlength="32">
-              <label for="username-or-email" data-error="用户名为4-16个英文或2-8个中文字符">用户名/邮箱</label>
+              {{ form.email }}
+              <label for="{{ form.email.id_for_label }}" data-error="邮箱格式错误">邮箱</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12">
+              {{ form.password.errors|safe }}
               <i class="material-icons prefix">lock</i>
-              <input id="password" class="validate" name="password"
-                     type="password" data-length="32" maxlength="32"
-                     minlength="8">
-              <label for="password" data-error="密码长度为8-32位">密码</label>
+              {{ form.password }}
+              <label for="{{ form.password.id_for_label }}" data-error="密码长度为8-32位">密码</label>
             </div>
           </div>
+          {{ form.password_length }}
           <div class="row">
-            <p>
+            <div>
               <i class="material-icons prefix"></i>
-              <input type="checkbox" id="remember-me" name="remember-me">
-              <label for="remember-me">记住我</label>
-            </p>
+              {{ form.keep_login }}
+              <label for="{{ form.keep_login.id_for_label }}">保持登录</label>
+            </div>
           </div>
+{#          <div class="row">#}
+{#            <div class="input-field col s12">#}
+{#              <i class="material-icons prefix">account_circle</i>#}
+{#              <input id="username-or-email" class="validate"#}
+{#                     name="username_or_email" type="text" minlength="2"#}
+{#                     maxlength="32">#}
+{#              <label for="username-or-email" data-error="用户名为4-16个英文或2-8个中文字符">用户名/邮箱</label>#}
+{#            </div>#}
+{#          </div>#}
+{#          <div class="row">#}
+{#            <div class="input-field col s12">#}
+{#              <i class="material-icons prefix">lock</i>#}
+{#              <input id="password" class="validate" name="password"#}
+{#                     type="password" data-length="32" maxlength="32"#}
+{#                     minlength="8">#}
+{#              <label for="password" data-error="密码长度为8-32位">密码</label>#}
+{#            </div>#}
+{#          </div>#}
+{#          <div class="row">#}
+{#            <p>#}
+{#              <i class="material-icons prefix"></i>#}
+{#              <input type="checkbox" id="remember-me" name="remember-me">#}
+{#              <label for="remember-me">记住我</label>#}
+{#            </p>#}
+{#          </div>#}
           <div class="row">
             <button  class="waves-effect waves-light btn col l8 m10 s12 offset-l2 offset-m1"
                      type="submit" name="action">登录</button >
@@ -55,6 +80,6 @@
 {% endblock %}
 
 {% block js %}
-  <script src="{% static 'js/users/login.js' %}?v=0"></script>
+  <script src="{% static 'js/users/login.js' %}?v=3"></script>
   <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
 {% endblock %}

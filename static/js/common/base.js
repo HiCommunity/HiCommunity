@@ -189,7 +189,21 @@ function addLoadingCover(obj) {
     /*
      Append a loading cover to an object
      */
-    var loading_html = '<div class="loading-cover"></div>';
+    var loading_html = '<div class="row loading-cover center valign-wrapper">\n' +
+        '  <div class="col s12">' +
+        '    <div class="preloader-wrapper active">\n' +
+        '      <div class="spinner-layer spinner-red-only">\n' +
+        '        <div class="circle-clipper left">\n' +
+        '          <div class="circle"></div>\n' +
+        '        </div><div class="gap-patch">\n' +
+        '          <div class="circle"></div>\n' +
+        '        </div><div class="circle-clipper right">\n' +
+        '          <div class="circle"></div>\n' +
+        '        </div>\n' +
+        '      </div>\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '</div>';
     var _obj = obj || 'body';
     var $parent_elem = getJQueryObject(_obj);
     $(loading_html).hide().appendTo($parent_elem).fadeIn('slow');

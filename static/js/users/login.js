@@ -4,36 +4,39 @@ For users' login
 
 $(function () {
     $('#login-form').submit(function (e) {
-        // prevent default submit action
         e.preventDefault();
         var next_url = $.getUrlParam('next');
         var $this = $(this);
         var $submit_btn = $this.find('button[type=submit]');
         var $password = $this.find('#password');
-        var $usernameOrEmail = $this.find('#username-or-email');
+        var origin_password = $password.val();
+        var $usernameOrEmail = $this.find('#email');
         if (!$usernameOrEmail.val()) {
             $usernameOrEmail.focus();
             return false;
-        } else if (!$password.val()) {
+        } else if (!origin_password) {
             $password.focus();
             return false;
         }
-        var hashed_password = md5($password.val());
+        var hashed_password = md5(origin_password);
         $password.val(hashed_password);
-        var checked = $('#remember-me').is(':checked');
+        var checked = $('#keep-login').is(':checked');
         var data = {
-            'username_or_email': $usernameOrEmail.val(),
+            'email': $usernameOrEmail.val(),
             'password': hashed_password,
-            'checked': checked
+            'keep_login': checked,
+            'password_length': origin_password.length
         };
         $submit_btn.addClass('disabled');
         addLoadingCover();
+
         $.ajax({
             url: $this.attr('action'),
             data: data,
             type: $this.attr('method'),
             success: function (callback) {
                 var obj = $.parseJSON(callback);
+                console.log(obj);
                 if (obj.result) {
                     if (next_url) {
                         window.location.href = next_url;
@@ -41,7 +44,7 @@ $(function () {
                         window.location.href = '/';
                     }
                 } else {
-                    var msg = translateException(obj.message)
+                    var msg = translateException(obj.message);
                     Materialize.toast(msg, 3000);
                 }
             },

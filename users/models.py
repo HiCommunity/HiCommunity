@@ -2,15 +2,17 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from users.utils import validators
+# from django.core.validators import validate_email
 
 
 class Account(models.Model):
     """
     Users' accounts
     """
-    password = models.CharField(max_length=32, verbose_name='密码')
+    password = models.CharField(max_length=32, verbose_name='密码', validators=[validators.validate_password])
     username = models.CharField(max_length=16, verbose_name='用户名')
-    email = models.EmailField(max_length=64, verbose_name='邮箱')
+    email = models.EmailField(max_length=64, verbose_name='邮箱', validators=[validators.validate_email])
     state_choice = (('normal', '正常'), ('frozen', '冻结'), ('deleted', '注销'))
     state = models.CharField(choices=state_choice, max_length=32,
                              verbose_name='状态', default='normal')
