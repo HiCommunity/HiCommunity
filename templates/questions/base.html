@@ -22,7 +22,7 @@
 
           {% if is_login %}
             {% with user=request.session.login_user %}
-            <a id="nav-avatar" href="#" title="Hello {{ user.name }}"><img src="{{ user.avatar.thumb_small }}" alt="User Avatar"></a>
+            <a id="nav-avatar" href="#" title="Hello {{ user.name }}"><img class="circle" src="{{ user.avatar.thumb_small }}" alt="User Avatar"></a>
             <a id="nav-username-btn" href="#"><span class="white-text name">{% ifequal user.role 'admin' %}<span class="yellow-text" title="管理员">[S]</span> {% endifequal %}{{ user.name }}</span></a>
             <a id="nav-email-btn" href="#"><span class="white-text email">{{ user.email }}</span></a>
             <a id="nav-logout-btn" href="{% url 'users:accounts:logout' %}"><span class="white-text email">注销</span></a>

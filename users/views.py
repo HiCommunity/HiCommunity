@@ -13,13 +13,13 @@ from django.template.response import TemplateResponse
 from common.constants.common import RET_FORMAT
 from common.constants.messages import Privileges
 from common.utils.js_ import js_str2bool
-from common.utils.url import get_from_url
-
+from users import forms as users_form
 from users.exception import *
 from users.models import Account
-from users.utils import validation
+from users.forms import *
 from users.utils.security import request_method, login_required
-from users.view_helper import *
+from users.utils.session import *
+from users.view_helper import generate_avatar
 
 
 @request_method('GET')
@@ -34,11 +34,11 @@ def register(request):
     username = request.POST.get('username', '').strip()
     email = request.POST.get('email', '').strip().lower()
     # validation
-    if (not validation.validate_username(username)
-            or not validation.validate_email(email)):
-        raise InvalidUsernameOrEmailFormat
-    elif not validation.validate_password(password):
-        raise InvalidPasswordFormat
+    # if (not validation.validate_username(username)
+    #         or not validation.validate_email(email)):
+    #     raise InvalidUsernameOrEmailFormat
+    # elif not validation.validate_password(password):
+    #     raise InvalidPasswordFormat
 
     # uniqueness check
     user_objects = Account.objects.filter(Q(username=username) |
@@ -78,13 +78,17 @@ def register(request):
                              Privileges.PLEASE_LOGIN % username)
 
     ret['result'] = True
-    ret['message']['redirect_url'] = reverse('users:accounts:login_page')
+    ret['redirect'] = reverse('users:accounts:login_page')
     return HttpResponse(json.dumps(ret))
 
 
 @request_method('GET')
 def login_page(request):
-    context = {'next': get_from_url(request)}
+    # login form
+    form = users_form.LoginForm(auto_id=True)
+    context = {
+        'form': form
+    }
     return TemplateResponse(request, 'users/login.html', context=context)
 
 
@@ -94,27 +98,25 @@ def login(request):
     user_is_login = get_login_session(request)
     if user_is_login:
         raise UserAlreadyLogin
-
     ret = RET_FORMAT
-    username_or_email = request.POST.get('username_or_email')
-    password = request.POST.get('password')
-    checked = js_str2bool(request.POST.get('checked'))
-
-    # params validation
-    if (not validation.validate_email(username_or_email) and not
-            validation.validate_username(username_or_email)):
-        raise InvalidUsernameOrEmailFormat
-    elif not validation.validate_password(password):
-        raise InvalidPasswordFormat
-    else:
-        username_or_email = username_or_email.strip()
-        account_objects = Account.objects.filter(
-            Q(email=username_or_email) | Q(username=username_or_email))
+    # clean data
+    data = {
+        'email': request.POST.get('email').strip(),
+        'password': request.POST.get('password'),
+        'keep_login': js_str2bool(request.POST.get('keep_login')),
+        'password_length': request.POST.get('password_length'),
+    }
+    f = LoginForm(data=data, error_class=DivErrorList)
+    if f.is_valid():
+        email = f.cleaned_data['email']
+        password = f.cleaned_data['password']
+        keep_login = f.cleaned_data['keep_login']
+        account_objects = Account.objects.filter(email=email)
         if account_objects.count() == 1:
             account_object = account_objects[0]
             if account_object.password == password:
                 # login successfully
-                if not checked:
+                if not keep_login:
                     request.session.set_expiry(0)
                 set_login_session(request, account_object)
                 ret['result'] = True
@@ -122,12 +124,19 @@ def login(request):
                 raise InvalidPassword
         else:
             raise UsernameOrEmailNotExist
+    else:
+        err_data = f.errors.as_data()
+        if err_data.get('email'):
+            raise InvalidEmailFormat
+        elif err_data.get('password') or err_data.get('password_length'):
+            raise InvalidPasswordFormat
+        # ret['message']['desc'] = errs[item][0].__str__
     return HttpResponse(json.dumps(ret))
 
 
+@login_required()
 @request_method('POST')
-@login_required
-def logout(request, *args, **kwargs):
+def logout(request):
     """
     Note Django does not provide automatic purging of expired sessions.
     Therefore we should call "django-admin clearsessions" command

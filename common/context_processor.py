@@ -1,9 +1,9 @@
 # coding=utf-8
-from users.constants.common import SESSION_LOGIN_USER
+from users.utils.session import get_login_session
 
 
 def common(request):
-    user = request.session.get(SESSION_LOGIN_USER)
+    login_user = get_login_session(request)
     return {
-        'is_login': True if user else False
+        'is_login': True if login_user else False
     }

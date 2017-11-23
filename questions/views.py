@@ -13,11 +13,10 @@ from common.exception import EmptyContent
 from common.utils.string_ import str2int
 from questions import models as questions_models
 from questions.models import Question, Answer, Comment
-from questions import views_helper
 from questions.exception import *
 from users.models import Account
-from users.utils.security import request_method, login_required, role_restrict
-from users.view_helper import get_login_session
+from users.utils.security import request_method, login_required
+from users.utils.session import get_login_session
 
 
 @request_method('GET')
@@ -71,7 +70,7 @@ def question_detail_page(request, *args, **kwargs):
     return TemplateResponse(request, 'questions/detail.html', context=context)
 
 
-@login_required
+@login_required()
 @request_method('POST')
 def new_question(request, region, board, *args, **kwargs):
     ret = RET_FORMAT
@@ -94,7 +93,7 @@ def new_question(request, region, board, *args, **kwargs):
     return HttpResponse(json.dumps(ret))
 
 
-@login_required
+@login_required()
 @request_method('POST')
 def new_answer(request, region, board, qid, **kwargs):
     ret = RET_FORMAT
@@ -114,7 +113,7 @@ def new_answer(request, region, board, qid, **kwargs):
     return HttpResponse(json.dumps(ret))
 
 
-@login_required
+@login_required()
 @request_method('POST')
 def new_comment(request, region, board, qid, **kwargs):
     ret = RET_FORMAT
@@ -135,14 +134,13 @@ def new_comment(request, region, board, qid, **kwargs):
     return HttpResponse(json.dumps(ret))
 
 
-@login_required
+@login_required()
 @request_method('POST')
 def close_question(request):
     pass
 
 
-@login_required
+@login_required('admin')
 @request_method('DELETE')
-@role_restrict('admin')
 def delete_question(request):
     pass
