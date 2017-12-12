@@ -63,7 +63,7 @@
 2. 修改settings.py文件中“DATABASES”各项
 3. 初始化数据库，在项目根目录依次执行如下命令
 * python manage.py makemigrations
-* python manage.py migrations
+* python manage.py migrate
 4. 执行sqls/test.sql中的SQL语句（临时构建问答社区的区域板块结构，后续会做管理平台）
 5. 启动Django
 
